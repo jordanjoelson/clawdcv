@@ -27,8 +27,8 @@ experience:
     start: Jun 2020
     end: Present
     bullets:
-      - Developed a REST API using FastAPI and PostgreSQL to store, retrieve, and query data from 5,000+ protein samples, reducing manual data entry time by 40%
-      - Automated weekly report generation with Python and pandas, cutting researcher prep time from 3 hours to 15 minutes
+      - Built a FastAPI/PostgreSQL REST API for 5,000+ protein samples, cutting manual data entry time by 40%
+      - Automated weekly reports with Python and pandas, cutting researcher prep time from 3 hours to 15 minutes
       - Collaborated with a team of 4 to migrate legacy MATLAB analysis scripts to Python, improving runtime by 60%
 
   - company: Southwestern University
@@ -37,7 +37,7 @@ experience:
     start: Sep 2018
     end: Apr 2020
     bullets:
-      - Supported 200+ faculty and staff with hardware, software, and networking issues, maintaining a 95% same-day resolution rate
+      - Supported 200+ faculty and staff with hardware, software, and network issues at a 95% same-day resolution rate
       - Deployed and configured 50+ workstations across campus using Ghost imaging software
       - Created internal documentation that reduced onboarding time for new IT staff by 30%
 
@@ -47,7 +47,7 @@ experience:
     start: May 2019
     end: Aug 2019
     bullets:
-      - Explored methods to generate and evaluate counterfactual explanations for black-box classifiers using Python and scikit-learn
+      - Researched counterfactual explanation methods for black-box ML classifiers using Python and scikit-learn
       - Presented findings to a faculty committee of 6, receiving approval for continued funding
       - Authored a 12-page technical report summarizing experimental results and future research directions
 
@@ -57,7 +57,7 @@ projects:
     start: Jun 2020
     end: Present
     bullets:
-      - Built a full-stack web app that visualizes GitHub repository activity using the GitHub API, serving 500+ weekly active users
+      - Built a full-stack app visualizing GitHub repo activity via the GitHub API, serving 500+ weekly active users
       - Designed an interactive D3.js dashboard displaying commit frequency, contributor graphs, and language breakdowns
       - Implemented OAuth 2.0 authentication and a rate-limit-aware caching layer that reduced API calls by 75%
 
@@ -74,9 +74,9 @@ projects:
     start: Jan 2020
     end: May 2020
     bullets:
-      - Scraped and normalized event data from 8 campus department websites using Cheerio and cron-scheduled Node.js jobs
+      - Scraped event data from 8 campus department websites using Cheerio and cron-scheduled Node.js jobs
       - Built a responsive React frontend allowing students to filter events by category, date, and location
-      - Deployed to a DigitalOcean droplet with Nginx reverse proxy; sustained 300+ concurrent users during peak registration periods
+      - Deployed on DigitalOcean with Nginx reverse proxy, handling 300+ concurrent users at peak registration
 
 skills:
   languages: [Java, Python, C/C++, SQL, JavaScript, HTML/CSS, R]
