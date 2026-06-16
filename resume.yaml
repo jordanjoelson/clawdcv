@@ -1,0 +1,85 @@
+name: Jake Ryan
+contact:
+  phone: "123-456-7890"
+  email: jake@example.com
+  linkedin: linkedin.com/in/jake
+  github: github.com/jake
+
+education:
+  - school: Southwestern University
+    degree: Bachelor of Arts in Computer Science, Minor in Business
+    location: Georgetown, TX
+    start: Aug 2018
+    end: May 2021
+    gpa: 3.8
+    coursework: [Data Structures, Algorithms, Operating Systems, Computer Networks]
+
+  - school: Blinn College
+    degree: Associate's in Liberal Arts
+    location: Bryan, TX
+    start: Aug 2014
+    end: May 2018
+
+experience:
+  - company: Texas A&M University
+    title: Undergraduate Research Assistant
+    location: College Station, TX
+    start: Jun 2020
+    end: Present
+    bullets:
+      - Developed a REST API using FastAPI and PostgreSQL to store, retrieve, and query data from 5,000+ protein samples, reducing manual data entry time by 40%
+      - Automated weekly report generation with Python and pandas, cutting researcher prep time from 3 hours to 15 minutes
+      - Collaborated with a team of 4 to migrate legacy MATLAB analysis scripts to Python, improving runtime by 60%
+
+  - company: Southwestern University
+    title: Information Technology Support Specialist
+    location: Georgetown, TX
+    start: Sep 2018
+    end: Apr 2020
+    bullets:
+      - Supported 200+ faculty and staff with hardware, software, and networking issues, maintaining a 95% same-day resolution rate
+      - Deployed and configured 50+ workstations across campus using Ghost imaging software
+      - Created internal documentation that reduced onboarding time for new IT staff by 30%
+
+  - company: Southwestern University
+    title: Artificial Intelligence Research Assistant
+    location: Georgetown, TX
+    start: May 2019
+    end: Aug 2019
+    bullets:
+      - Explored methods to generate and evaluate counterfactual explanations for black-box classifiers using Python and scikit-learn
+      - Presented findings to a faculty committee of 6, receiving approval for continued funding
+      - Authored a 12-page technical report summarizing experimental results and future research directions
+
+projects:
+  - name: Gitlytics
+    technologies: [Python, Flask, React, PostgreSQL, D3]
+    start: Jun 2020
+    end: Present
+    bullets:
+      - Built a full-stack web app that visualizes GitHub repository activity using the GitHub API, serving 500+ weekly active users
+      - Designed an interactive D3.js dashboard displaying commit frequency, contributor graphs, and language breakdowns
+      - Implemented OAuth 2.0 authentication and a rate-limit-aware caching layer that reduced API calls by 75%
+
+  - name: Simple Fizz Buzz
+    technologies: [Awk, Bash, Java, Matlab, Python, Shell]
+    start: Mar 2020
+    end: Mar 2020
+    bullets:
+      - Implemented FizzBuzz in 6 languages to benchmark idiomatic patterns and runtime performance across environments
+      - Wrote a Bash harness that runs all implementations, diffs outputs, and surfaces any discrepancies automatically
+
+  - name: Campus Event Aggregator
+    technologies: [Node.js, Express, MongoDB, React, Tailwind CSS]
+    start: Jan 2020
+    end: May 2020
+    bullets:
+      - Scraped and normalized event data from 8 campus department websites using Cheerio and cron-scheduled Node.js jobs
+      - Built a responsive React frontend allowing students to filter events by category, date, and location
+      - Deployed to a DigitalOcean droplet with Nginx reverse proxy; sustained 300+ concurrent users during peak registration periods
+
+skills:
+  languages: [Java, Python, C/C++, SQL, JavaScript, HTML/CSS, R]
+  frameworks: [React, Node.js, Flask, FastAPI, JUnit, WordPress, Material-UI]
+  tools: [Git, Docker, TravisCI, Google Cloud Platform, VS Code, PyCharm, IntelliJ]
+  libraries: [pandas, NumPy, Matplotlib, scikit-learn]
