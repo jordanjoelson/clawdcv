@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "chokidar": "^5.0.0",
     "js-yaml": "^4.2.0",
     "next": "16.2.9",
     "react": "19.2.4",
