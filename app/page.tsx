@@ -3,6 +3,7 @@ import path from 'path'
 import yaml from 'js-yaml'
 import type { Resume } from './types'
 import ResumeView from './components/Resume'
+import GeometryCapture from './components/GeometryCapture'
 import s from './components/resume.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -15,6 +16,7 @@ export default function Page() {
   return (
     <main className={s.shell}>
       <ResumeView data={data} />
+      {process.env.NODE_ENV === 'development' && <GeometryCapture data={data} />}
     </main>
   )
 }

@@ -3,7 +3,7 @@ import s from './resume.module.css'
 
 export default function ResumeView({ data }: { data: Resume }) {
   return (
-    <div className={s.page}>
+    <div className={s.page} data-resume-page>
       <Header name={data.name} contact={data.contact} />
       <Section title="Education">
         {data.education.map((e, i) => <EducationItem key={i} entry={e} />)}
@@ -75,7 +75,7 @@ function ExperienceItem({ entry }: { entry: ExperienceEntry }) {
         <span className={s.italic}>{entry.title}</span>
         <span>{entry.start} – {entry.end}</span>
       </div>
-      <ul className={s.bullets}>
+      <ul className={s.bullets} data-bullets>
         {entry.bullets.map((b, i) => <li key={i}>{b}</li>)}
       </ul>
     </div>
