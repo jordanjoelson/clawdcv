@@ -4,13 +4,18 @@
   display: flex;
   justify-content: center;
   padding: 2rem 0;
+  align-items: flex-start;
+}
+
+.zoomWrap {
+  /* class exists so print CSS can reset the transform */
 }
 
 .page {
   width: 8.5in;
   min-height: 11in;
   background: #fff;
-  padding: 0.5in;
+  padding: 0.5in 0.5in calc(0.5in - 9px);
   box-sizing: border-box;
   font-family: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
   font-size: 11pt;
