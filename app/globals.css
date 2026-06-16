@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+@page {
+  size: letter;
+  margin: 0;
+}
+
+@media print {
+  [data-geo],
+  [data-export-btn] { display: none !important; }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  [data-shell] {
+    background: white !important;
+    padding: 0 !important;
+    min-height: unset !important;
+    display: block !important;
+  }
+
+  [data-zoom-wrap] {
+    transform: none !important;
+    margin-bottom: 0 !important;
+  }
+}
