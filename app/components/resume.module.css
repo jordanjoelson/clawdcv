@@ -1,0 +1,106 @@
+.shell {
+  min-height: 100vh;
+  background: #e5e7eb;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.page {
+  width: 8.5in;
+  min-height: 11in;
+  background: #fff;
+  padding: 0.5in;
+  box-sizing: border-box;
+  font-family: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11pt;
+  color: #000;
+  line-height: 1.2;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 6pt;
+}
+
+.name {
+  font-size: 28pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.contact {
+  font-size: 10pt;
+  margin: 4pt 0 0 0;
+}
+
+.sep {
+  color: #555;
+}
+
+.section {
+  margin-top: 10pt;
+}
+
+.sectionTitle {
+  font-size: 12pt;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1.5px solid #000;
+  padding-bottom: 1pt;
+  margin: 0 0 5pt 0;
+}
+
+.entry {
+  margin-bottom: 6pt;
+}
+
+.entryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.tech {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.detail {
+  font-size: 10pt;
+  margin: 1pt 0 0 0;
+}
+
+.bullets {
+  margin: 2pt 0 0 0;
+  padding-left: 14pt;
+  list-style: disc;
+}
+
+.bullets li {
+  font-size: 11pt;
+  line-height: 1.25;
+  margin-bottom: 1.5pt;
+}
+
+.skills {
+  margin: 0;
+  padding-left: 14pt;
+  list-style: none;
+}
+
+.skills li {
+  font-size: 11pt;
+  line-height: 1.35;
+}

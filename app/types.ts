@@ -1,0 +1,49 @@
+export interface Contact {
+  phone: string
+  email: string
+  linkedin: string
+  github: string
+}
+
+export interface EducationEntry {
+  school: string
+  degree: string
+  location: string
+  start: string
+  end: string
+  gpa?: number
+  coursework?: string[]
+}
+
+export interface ExperienceEntry {
+  company: string
+  title: string
+  location: string
+  start: string
+  end: string
+  bullets: string[]
+}
+
+export interface ProjectEntry {
+  name: string
+  technologies: string[]
+  start: string
+  end: string
+  bullets: string[]
+}
+
+export interface Skills {
+  languages: string[]
+  frameworks: string[]
+  tools: string[]
+  libraries: string[]
+}
+
+export interface Resume {
+  name: string
+  contact: Contact
+  education: EducationEntry[]
+  experience: ExperienceEntry[]
+  projects: ProjectEntry[]
+  skills: Skills
+}
