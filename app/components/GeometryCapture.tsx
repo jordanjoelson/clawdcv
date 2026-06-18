@@ -5,6 +5,18 @@ import type { Resume } from '../types'
 
 const FONT = '14.67px Calibri'
 
+// Pretext's canvas measureText reports text ~0.25% narrower than the browser
+// actually renders it — a constant proportional bias (verified by auditing real
+// rendered widths across all bullets: error was a uniform ~0.25%, never random).
+// Left uncorrected, Pretext calls a line "1 line / 100% full" that the real DOM
+// then wraps, silently overflowing the page. Multiply measured widths by this so
+// every number reflects what the browser draws. Re-measure if FONT/width changes.
+const CALIBRATION = 1.0025
+// Wrap 1px before the true edge so calibration jitter can never flip a line.
+// 1px (not 2) because the data showed the tightest safe line sits ~1.5px off the
+// edge — a 2px margin would false-flag a line that genuinely fits.
+const WRAP_MARGIN = 1
+
 export default function GeometryCapture({ data }: { data: Resume }) {
   useLayoutEffect(() => {
     const allBulletLists = document.querySelectorAll('[data-bullets]')
@@ -18,12 +30,17 @@ export default function GeometryCapture({ data }: { data: Resume }) {
 
     const measure = (text: string) => {
       const prepared = prepareWithSegments(text, FONT)
-      const { lineCount, maxLineWidth } = measureLineStats(prepared, containerWidth)
+      // Wrap where the real browser wraps: it overflows when the true width exceeds
+      // the container, i.e. when Pretext's width exceeds containerWidth / CALIBRATION.
+      // Shrinking the wrap width (plus a 1px margin) makes lineCount match the page.
+      const wrapWidth = containerWidth / CALIBRATION - WRAP_MARGIN
+      const { lineCount, maxLineWidth } = measureLineStats(prepared, wrapWidth)
+      const trueWidth = maxLineWidth * CALIBRATION
       return {
         lines: lineCount,
-        width: Math.round(maxLineWidth * 10) / 10,
-        fill: Math.round((maxLineWidth / containerWidth) * 1000) / 1000,
-        remaining: Math.round((containerWidth - maxLineWidth) * 10) / 10,
+        width: Math.round(trueWidth * 10) / 10,
+        fill: Math.round((trueWidth / containerWidth) * 1000) / 1000,
+        remaining: Math.round((containerWidth - trueWidth) * 10) / 10,
       }
     }
 
@@ -51,7 +68,7 @@ export default function GeometryCapture({ data }: { data: Resume }) {
           'pointer-events: none',
           'user-select: none',
           'white-space: nowrap',
-          `color: ${m.lines > 1 ? '#ef4444' : m.fill < 0.75 ? '#f59e0b' : '#22c55e'}`,
+          `color: ${m.lines > 1 ? '#ef4444' : m.fill < 0.95 ? '#f59e0b' : '#22c55e'}`,
         ].join(';')
         span.textContent = `${Math.round(m.fill * 100)}%`
         el.appendChild(span)
@@ -77,11 +94,11 @@ export default function GeometryCapture({ data }: { data: Resume }) {
     const warnings: string[] = []
     experience.forEach(e => e.bullets.forEach(b => {
       if (b.lines > 1) warnings.push(`experience "${e.company}" bullet[${b.i}]: ${b.lines} lines`)
-      else if (b.fill < 0.75) warnings.push(`experience "${e.company}" bullet[${b.i}]: ${Math.round(b.fill * 100)}% fill — too short`)
+      else if (b.fill < 0.95) warnings.push(`experience "${e.company}" bullet[${b.i}]: ${Math.round(b.fill * 100)}% fill — looks short`)
     }))
     projects.forEach(e => e.bullets.forEach(b => {
       if (b.lines > 1) warnings.push(`project "${e.name}" bullet[${b.i}]: ${b.lines} lines`)
-      else if (b.fill < 0.75) warnings.push(`project "${e.name}" bullet[${b.i}]: ${Math.round(b.fill * 100)}% fill — too short`)
+      else if (b.fill < 0.95) warnings.push(`project "${e.name}" bullet[${b.i}]: ${Math.round(b.fill * 100)}% fill — looks short`)
     }))
     if (scrollHeight > capacity) warnings.push(`page overflows by ${scrollHeight - capacity}px`)
 
