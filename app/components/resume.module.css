@@ -57,10 +57,15 @@
   border-bottom: 1.5px solid #000;
   padding-bottom: 1pt;
   margin: 0 0 5pt 0;
+  /* In print, don't strand a section heading at the bottom of a page — keep it
+     with the content that follows it. (No effect on screen, which isn't paginated.) */
+  break-after: avoid;
 }
 
 .entry {
   margin-bottom: 6pt;
+  /* Don't split a single job/project entry across a page break in print. */
+  break-inside: avoid;
 }
 
 .entryRow {
@@ -103,6 +108,8 @@
   margin: 0;
   padding-left: 14pt;
   list-style: none;
+  /* Keep the skills block whole in print (don't split its rows across pages). */
+  break-inside: avoid;
 }
 
 .skills li {
