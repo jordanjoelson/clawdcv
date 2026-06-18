@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* print pagination: see @media print below */
 @page {
   size: letter;
   margin: 0;
@@ -8,6 +9,30 @@
 @media print {
   [data-geo],
   [data-export-btn] { display: none !important; }
+
+  /*
+    Print: undo the on-screen page slicing. The cards are each fixed-height clipped
+    boxes (good for preview, wrong for print — they clip descenders and a block of
+    exactly 11in triggers Chrome's phantom blank page). Only the first card holds the
+    full content at marginTop:0, so expand it to natural height and hide the rest;
+    @page then paginates real overflow onto a second sheet underneath.
+  */
+  [data-resume-page] { display: none !important; }
+  [data-page]:not([data-page="0"]) { display: none !important; }
+  /*
+    Content reaches ~10.9 of 11in. At 100% scale that ~9px gap to the edge falls inside
+    Chrome's pagination rounding, spawning a phantom blank page (99% scale clears it).
+    Drop the page's own bottom padding in print so the block backs ~0.5in off the edge —
+    the sheet still supplies the bottom whitespace, so it looks identical but prints clean
+    at any scale.
+  */
+  [data-page="0"] { height: auto !important; overflow: visible !important; padding-bottom: 0 !important; }
+  [data-page="0"] [data-page-clip] {
+    height: auto !important;
+    clip-path: none !important;
+    overflow: visible !important;
+  }
+  [data-page="0"] [data-page-shift] { margin-top: 0 !important; }
 
   html, body {
     margin: 0 !important;

@@ -35,13 +35,14 @@ export default function PageLayout({ data }: { data: Resume }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {Array.from({ length: numPages }).map((_, i) => (
-          <div key={i} className={s.page} style={{ minHeight: 'unset', height: `${PAGE_H}px` }}>
+          <div key={i} data-page={i} className={s.page} style={{ minHeight: 'unset', height: `${PAGE_H}px`, overflow: 'hidden' }}>
             {/*
               Inner clip sits inside the top padding — overflow:hidden here clips at the
               content edge, so the 48px top pad above it is always genuine white space.
+              In print these are collapsed to one natural flow (see globals.css @media print).
             */}
-            <div style={{ height: `${CONTENT_H}px`, overflow: 'hidden' }}>
-              <div style={{ marginTop: `-${i * CONTENT_H}px` }}>
+            <div data-page-clip style={{ height: `${CONTENT_H}px`, clipPath: 'inset(0 -9999px)' }}>
+              <div data-page-shift style={{ marginTop: `-${i * CONTENT_H}px` }}>
                 <ResumeContent data={data} bulletData={i === 0} />
               </div>
             </div>
