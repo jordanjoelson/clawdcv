@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
-/* print pagination: see @media print below */
+/* print pagination + per-page margins: see @media print below */
 @page {
   size: letter;
+  /* Continuation pages (2+) get a 0.5in top/bottom margin so content doesn't hug the
+     sheet edge — matching the top spacing page 1 gets from the page element's padding. */
+  margin: 0.5in 0 0.5in 0;
+}
+@page :first {
+  /* Page 1: top comes from the element's own 0.5in padding; keep @page margins at 0 so
+     the full single-page layout still clears the bottom edge (no phantom blank page). */
   margin: 0;
 }
 
