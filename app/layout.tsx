@@ -4,6 +4,7 @@ import HotReload from './components/HotReload'
 
 export const metadata: Metadata = {
   title: 'Resume',
+  icons: { icon: '/assets/clawdcv.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
