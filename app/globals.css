@@ -13,9 +13,13 @@
   margin: 0;
 }
 
+/* Dev "Show %" toggle: hide the fill badges when switched off (they stay measured). */
+html[data-badges="off"] [data-geo] { display: none !important; }
+
 @media print {
   [data-geo],
-  [data-export-btn] { display: none !important; }
+  [data-export-btn],
+  [data-app-control] { display: none !important; }
 
   /*
     Print: undo the on-screen page slicing. The cards are each fixed-height clipped
