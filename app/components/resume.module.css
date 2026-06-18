@@ -1,6 +1,6 @@
 .shell {
   min-height: 100vh;
-  background: #e5e7eb;
+  background: #111827; /* charcoal — screen only; print forces white */
   display: flex;
   justify-content: center;
   padding: 2rem 0;
