@@ -3,7 +3,6 @@ import path from 'path'
 import yaml from 'js-yaml'
 import type { Resume } from './types'
 import ResumeView from './components/Resume'
-import GeometryCapture from './components/GeometryCapture'
 import ExportButton from './components/ExportButton'
 import s from './components/resume.module.css'
 
@@ -19,7 +18,6 @@ export default function Page() {
       <div data-zoom-wrap style={{ transform: 'scale(0.75)', transformOrigin: 'top center' }}>
         <ResumeView data={data} />
       </div>
-      {process.env.NODE_ENV === 'development' && <GeometryCapture data={data} />}
       <ExportButton />
     </main>
   )

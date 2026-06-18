@@ -1,6 +1,7 @@
 'use client'
 import { useState, useLayoutEffect, useRef } from 'react'
 import ResumeContent from './ResumeContent'
+import GeometryCapture from './GeometryCapture'
 import type { Resume } from '../types'
 import s from './resume.module.css'
 
@@ -84,13 +85,19 @@ export default function PageLayout({ data }: { data: Resume }) {
               */}
               <div data-page-clip style={{ height: `${sliceH}px`, overflow: numPages > 1 ? 'hidden' : 'visible' }}>
                 <div data-page-shift style={{ marginTop: `-${start}px` }}>
-                  <ResumeContent data={data} bulletData={i === 0} />
+                  <ResumeContent data={data} bulletData />
                 </div>
               </div>
             </div>
           )
         })}
       </div>
+
+      {/* Measures geometry + draws the dev fill badges. Rendered here (not page.tsx) and
+          keyed on the page breaks so it re-runs after slicing settles, keeping badges aligned. */}
+      {process.env.NODE_ENV === 'development' && (
+        <GeometryCapture data={data} layout={breaks.join(',')} />
+      )}
     </>
   )
 }

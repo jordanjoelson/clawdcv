@@ -17,7 +17,10 @@ const CALIBRATION = 1.0025
 // edge — a 2px margin would false-flag a line that genuinely fits.
 const WRAP_MARGIN = 1
 
-export default function GeometryCapture({ data }: { data: Resume }) {
+// `layout` is a signal that changes when PageLayout's page slicing settles. Depending on
+// it makes this pass re-run *after* the cards re-slice, so badge positions track the final
+// layout instead of lagging a render behind on multi-page edits.
+export default function GeometryCapture({ data, layout }: { data: Resume; layout?: string }) {
   useLayoutEffect(() => {
     const allBulletLists = document.querySelectorAll('[data-bullets]')
     if (!allBulletLists.length) return
@@ -49,24 +52,34 @@ export default function GeometryCapture({ data }: { data: Resume }) {
       }
     }
 
-    // Inject indicators directly into each <li> so they follow bullets naturally
-    const injected: { el: HTMLElement; span: HTMLSpanElement; origPos: string }[] = []
-    allBulletLists.forEach(ul => {
-      ul.querySelectorAll('li').forEach(li => {
+    // Render fill badges in each page card's right margin, as children of the card so
+    // they sit OUTSIDE the slice clip — otherwise multi-page clipping cuts them off. Each
+    // badge is placed at its bullet's vertical offset within the card, so a bullet's badge
+    // appears on whichever page that bullet is visible. (display:none in print via [data-geo].)
+    const TOP_PAD = 48
+    const injectedSpans: HTMLSpanElement[] = []
+    const touchedCards = new Map<HTMLElement, string>()
+    document.querySelectorAll('[data-page]').forEach(cardNode => {
+      const card = cardNode as HTMLElement
+      const clip = card.querySelector('[data-page-clip]') as HTMLElement | null
+      if (!clip) return
+      const sliceH = clip.offsetHeight
+      if (!touchedCards.has(card)) {
+        touchedCards.set(card, card.style.position)
+        card.style.position = 'relative'
+      }
+      card.querySelectorAll('[data-bullets] li').forEach(li => {
         const el = li as HTMLElement
+        const top = el.offsetTop // relative to the card (now positioned); reflects the slice shift
+        if (top < TOP_PAD - 2 || top > TOP_PAD + sliceH) return // not visible on this page
         const m = measure(el.textContent ?? '')
-
-        const origPos = el.style.position
-        el.style.position = 'relative'
-
         const span = document.createElement('span')
         span.setAttribute('data-geo', '')
         // font-size 12px renders as 9px at 0.75 scale (matches the scaled resume)
         span.style.cssText = [
           'position: absolute',
-          'left: 100%',
-          'margin-left: 8px',
-          'top: 0',
+          'right: 6px',
+          `top: ${top}px`,
           'font-size: 12px',
           'font-family: monospace',
           'line-height: 1',
@@ -76,8 +89,8 @@ export default function GeometryCapture({ data }: { data: Resume }) {
           `color: ${m.fill < 0.95 ? '#f59e0b' : '#22c55e'}`,
         ].join(';')
         span.textContent = `${Math.round(m.fill * 100)}%`
-        el.appendChild(span)
-        injected.push({ el, span, origPos })
+        card.appendChild(span)
+        injectedSpans.push(span)
       })
     })
 
@@ -120,12 +133,10 @@ export default function GeometryCapture({ data }: { data: Resume }) {
     })
 
     return () => {
-      injected.forEach(({ el, span, origPos }) => {
-        span.remove()
-        el.style.position = origPos
-      })
+      injectedSpans.forEach(s => s.remove())
+      touchedCards.forEach((origPos, card) => { card.style.position = origPos })
     }
-  }, [data])
+  }, [data, layout])
 
   return null
 }
