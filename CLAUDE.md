@@ -1,4 +1,5 @@
 @AGENTS.md
+@philosophy.md
 
 # Resume Editor
 
