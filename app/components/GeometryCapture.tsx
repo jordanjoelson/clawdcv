@@ -1,6 +1,6 @@
 'use client'
 import { useLayoutEffect } from 'react'
-import { prepareWithSegments, measureLineStats } from '@chenglou/pretext'
+import { prepareWithSegments, walkLineRanges } from '@chenglou/pretext'
 import type { Resume } from '../types'
 
 const FONT = '14.67px Calibri'
@@ -34,8 +34,13 @@ export default function GeometryCapture({ data }: { data: Resume }) {
       // the container, i.e. when Pretext's width exceeds containerWidth / CALIBRATION.
       // Shrinking the wrap width (plus a 1px margin) makes lineCount match the page.
       const wrapWidth = containerWidth / CALIBRATION - WRAP_MARGIN
-      const { lineCount, maxLineWidth } = measureLineStats(prepared, wrapWidth)
-      const trueWidth = maxLineWidth * CALIBRATION
+      // `fill` measures the LAST line, not the widest. Middle lines always wrap near-
+      // full, so the only line that can waste space is the final one — and a full last
+      // line is the goal whether the bullet is 1 line or several. For a 1-line bullet
+      // the last line is the whole line, so this is identical to before.
+      let lastLineWidth = 0
+      const lineCount = walkLineRanges(prepared, wrapWidth, line => { lastLineWidth = line.width })
+      const trueWidth = lastLineWidth * CALIBRATION
       return {
         lines: lineCount,
         width: Math.round(trueWidth * 10) / 10,
@@ -68,7 +73,7 @@ export default function GeometryCapture({ data }: { data: Resume }) {
           'pointer-events: none',
           'user-select: none',
           'white-space: nowrap',
-          `color: ${m.lines > 1 ? '#ef4444' : m.fill < 0.95 ? '#f59e0b' : '#22c55e'}`,
+          `color: ${m.fill < 0.95 ? '#f59e0b' : '#22c55e'}`,
         ].join(';')
         span.textContent = `${Math.round(m.fill * 100)}%`
         el.appendChild(span)
@@ -91,14 +96,16 @@ export default function GeometryCapture({ data }: { data: Resume }) {
     const scrollHeight = pageEl?.scrollHeight ?? 0
     const capacity = Math.round(11 * 96)
 
+    // A bullet may be any number of lines (on request) — what matters is that its
+    // LAST line is full (≥95%), so no real estate is wasted. `fill` is the last-line
+    // fill, so this one rule covers 1-line and multi-line bullets alike. Page overflow
+    // is the only other failure: too many lines total to fit the sheet.
     const warnings: string[] = []
     experience.forEach(e => e.bullets.forEach(b => {
-      if (b.lines > 1) warnings.push(`experience "${e.company}" bullet[${b.i}]: ${b.lines} lines`)
-      else if (b.fill < 0.95) warnings.push(`experience "${e.company}" bullet[${b.i}]: ${Math.round(b.fill * 100)}% fill — looks short`)
+      if (b.fill < 0.95) warnings.push(`experience "${e.company}" bullet[${b.i}]: last line ${Math.round(b.fill * 100)}% — looks short`)
     }))
     projects.forEach(e => e.bullets.forEach(b => {
-      if (b.lines > 1) warnings.push(`project "${e.name}" bullet[${b.i}]: ${b.lines} lines`)
-      else if (b.fill < 0.95) warnings.push(`project "${e.name}" bullet[${b.i}]: ${Math.round(b.fill * 100)}% fill — looks short`)
+      if (b.fill < 0.95) warnings.push(`project "${e.name}" bullet[${b.i}]: last line ${Math.round(b.fill * 100)}% — looks short`)
     }))
     if (scrollHeight > capacity) warnings.push(`page overflows by ${scrollHeight - capacity}px`)
 

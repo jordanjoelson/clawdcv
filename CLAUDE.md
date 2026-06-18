@@ -16,7 +16,7 @@ This is a local-first resume tool. The user talks to you to edit their resume. Y
 ## Layout constraints
 
 - **Font:** 14.67px Calibri (11pt) in a 720px wide content area
-- **Bullet target:** 1 line per bullet. Pretext measures exact line counts — trust `geometry.json`, not your intuition about character counts
+- **Bullet target:** fill the *last* line to ≥95% — no wasted real estate. Bullets are 1 line by default; multiple lines are fine when the user asks, as long as the last line still hits ≥95%. `geometry.json` reports `fill` as the **last-line** fill and `lines` as the count — trust it, not your intuition about character counts
 - **Page:** 8.5" × 11" (1056px at 96dpi). `geometry.json` reports `page.remaining` — keep it positive
 - **Line height:** ~18.33px (reported live in `geometry.json` under `lineHeight`)
 
@@ -45,7 +45,7 @@ This is a local-first resume tool. The user talks to you to edit their resume. Y
 }
 ```
 
-`warnings` is pre-computed — any bullet over 1 line or page overflow will appear there. Check it first.
+`warnings` is pre-computed — any bullet whose last line is under 95%, or page overflow, will appear there. Check it first.
 
 ## What to avoid
 
