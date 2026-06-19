@@ -49,6 +49,6 @@ This is a local-first resume tool. The user talks to you to edit their resume. Y
 
 ## What to avoid
 
-- Do not change font, font size, or container width in the CSS without updating the `FONT` constant in `app/components/GeometryCapture.tsx` to match — Pretext measurements will drift otherwise
+- Font, font size, and container width are auto-detected: `GeometryCapture.tsx` reads them from the rendered DOM and measures Pretext's per-font calibration live against a hidden probe. Change the CSS freely — the measurements follow. (`geometry.json` echoes the active `font` and `calibration` so you can confirm it adapted.) Just don't reintroduce a hardcoded font/calibration constant
 - Do not add new sections or structural changes to the YAML without updating `app/types.ts` and `app/components/Resume.tsx`
 - Do not edit `geometry.json` directly — it is generated on every page load
