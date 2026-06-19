@@ -7,13 +7,15 @@ import s from './resume.module.css'
 
 const PAGE_H = 1056   // 11in at 96dpi
 const TOP_PAD = 48    // 0.5in
-const BOT_PAD = 39    // calc(0.5in - 9px) — probe only; cards size their bottom via the slice
+const BOT_PAD = 39    // calc(0.5in - 9px) — the page's bottom padding; reserved on page 1 too
 
-// Per-page content budgets, mirroring the print @page margins in globals.css so the
-// screen preview breaks at the same places the PDF does:
-//   page 1   — element pad-top (48), no bottom margin        → 1056 - 48      = 1008
+// Per-page content budgets. Page 1 now reserves its bottom margin as well, so overflow
+// breaks to page 2 instead of spilling into the bottom margin — and this matches the
+// geometry overflow warning, which fires at this same point (scrollHeight > PAGE_H).
+// Page 2+ mirror the print @page margins in globals.css.
+//   page 1   — element pad-top (48) + pad-bottom (39)        → 1056 - 48 - 39 = 969
 //   page 2+  — @page top (48) + @page bottom (48)            → 1056 - 48 - 48 = 960
-const PAGE1_BUDGET = PAGE_H - TOP_PAD
+const PAGE1_BUDGET = PAGE_H - TOP_PAD - BOT_PAD
 const CONT_BUDGET = PAGE_H - TOP_PAD - TOP_PAD
 
 export default function PageLayout({ data }: { data: Resume }) {
@@ -24,34 +26,53 @@ export default function PageLayout({ data }: { data: Resume }) {
   useLayoutEffect(() => {
     const probe = probeRef.current
     if (!probe) return
-    const total = probe.scrollHeight - TOP_PAD - BOT_PAD
 
-    // Clean break points (content-relative): before each section, and before each entry
-    // except a section's first — keeping a heading bound to its first entry, mirroring
-    // the print break rules (break-after on headings, break-inside on entries).
-    const candidates = new Set<number>()
-    probe.querySelectorAll('section').forEach(sec => {
-      candidates.add((sec as HTMLElement).offsetTop - TOP_PAD)
-      const entries = sec.querySelectorAll<HTMLElement>(`.${s.entry}`)
-      entries.forEach((e, idx) => { if (idx > 0) candidates.add(e.offsetTop - TOP_PAD) })
-    })
-    const points = [...candidates].filter(o => o > 0 && o < total).sort((a, b) => a - b)
+    const compute = () => {
+      // Read the page's actual padding from the DOM so the math is correct for whatever
+      // template is active (e.g. the compact template uses a smaller top padding). This
+      // also keeps page 1's budget aligned with the geometry overflow warning per-template.
+      const cs = getComputedStyle(probe)
+      const topPad = parseFloat(cs.paddingTop) || TOP_PAD
+      const botPad = parseFloat(cs.paddingBottom) || BOT_PAD
+      const total = probe.scrollHeight - topPad - botPad
+      const page1Budget = PAGE_H - topPad - botPad
 
-    // Greedily pack whole blocks into each page using that page's budget.
-    const result = [0]
-    let start = 0
-    let page = 0
-    while (start < total) {
-      const limit = start + (page === 0 ? PAGE1_BUDGET : CONT_BUDGET)
-      if (total <= limit) break
-      const fit = points.filter(p => p > start && p <= limit)
-      const next = fit.length ? fit[fit.length - 1] : limit // hard-cut if a block exceeds a page
-      result.push(next)
-      start = next
-      page++
+      // Clean break points (content-relative): before each section, and before each entry
+      // except a section's first — keeping a heading bound to its first entry, mirroring
+      // the print break rules (break-after on headings, break-inside on entries).
+      const candidates = new Set<number>()
+      probe.querySelectorAll('section').forEach(sec => {
+        candidates.add((sec as HTMLElement).offsetTop - topPad)
+        const entries = sec.querySelectorAll<HTMLElement>(`.${s.entry}`)
+        entries.forEach((e, idx) => { if (idx > 0) candidates.add(e.offsetTop - topPad) })
+      })
+      const points = [...candidates].filter(o => o > 0 && o < total).sort((a, b) => a - b)
+
+      // Greedily pack whole blocks into each page using that page's budget.
+      const result = [0]
+      let start = 0
+      let page = 0
+      while (start < total) {
+        const limit = start + (page === 0 ? page1Budget : CONT_BUDGET)
+        if (total <= limit) break
+        const fit = points.filter(p => p > start && p <= limit)
+        const next = fit.length ? fit[fit.length - 1] : limit // hard-cut if a block exceeds a page
+        result.push(next)
+        start = next
+        page++
+      }
+      result.push(total)
+      setBreaks(result)
     }
-    result.push(total)
-    setBreaks(result)
+
+    compute()
+
+    // Recompute when the probe's rendered size changes. Font/template/CSS edits change the
+    // layout WITHOUT changing `data`, so a [data]-only effect would leave stale page breaks
+    // — e.g. a phantom blank second page lingering after the content shrank back to one page.
+    const ro = new ResizeObserver(() => compute())
+    ro.observe(probe)
+    return () => ro.disconnect()
   }, [data])
 
   const numPages = breaks.length - 1
