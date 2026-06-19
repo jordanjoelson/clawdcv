@@ -21,7 +21,7 @@ export default function Page() {
         <ResumeView data={data} />
       </div>
       {process.env.NODE_ENV === 'development' && <BadgeToggle />}
-      <ExportButton />
+      <ExportButton name={data.name} />
     </main>
   )
 }
