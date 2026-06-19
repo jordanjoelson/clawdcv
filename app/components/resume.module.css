@@ -106,7 +106,7 @@
 
 .skills {
   margin: 0;
-  padding-left: 14pt;
+  padding-left: 0;
   list-style: none;
   /* Keep the skills block whole in print (don't split its rows across pages). */
   break-inside: avoid;
