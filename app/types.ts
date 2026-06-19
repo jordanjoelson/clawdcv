@@ -47,3 +47,12 @@ export interface Resume {
   projects: ProjectEntry[]
   skills: Skills
 }
+
+export type TemplateName = 'jake' | 'compact'
+export type FontName = 'calibri' | 'times' | 'georgia' | 'cambria' | 'arial'
+
+// Rendering preferences (profile.yaml). Separate from resume content.
+export interface Profile {
+  template: TemplateName
+  font: FontName
+}

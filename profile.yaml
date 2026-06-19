@@ -1,0 +1,15 @@
+# Your rendering preferences. Edit here, or let the conversational intake fill it in.
+# (Content lives in resume.yaml; this file is just how it looks.)
+
+# Layout density:
+#   jake    — roomy, classic spacing
+#   compact — denser: smaller type, tighter rhythm, justified bullets
+template: compact
+
+# Font (only faces confirmed installed with full bold/italic):
+#   calibri — clean sans (default)
+#   times   — Times New Roman, classic serif
+#   georgia — serif, very readable on screen
+#   cambria — serif designed for screen + print
+#   arial   — neutral sans
+font: georgia

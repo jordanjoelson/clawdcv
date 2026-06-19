@@ -144,15 +144,13 @@
   line-height: var(--skills-lh);
 }
 
-/* ── Compact template ─────────────────────────────────────────────────────────
-   Denser variant in Georgia: smaller type, tighter vertical rhythm, thin
-   section rules, justified bullet text. Switched on by data-template="compact" on
-   the app shell (see app/active-template.ts + page.tsx). Page margins are left
-   untouched so pagination/geometry stay valid. */
+/* ── Compact template (layout only — font is a separate axis; see [data-font=*] below) ──
+   Denser variant: smaller type, tighter vertical rhythm, thin section rules, justified
+   bullet text. Switched on by data-template="compact" (set from profile.yaml via page.tsx).
+   Page margins are left untouched so pagination/geometry stay valid. */
 [data-template="compact"] .page {
   /* Sizes mirror the source artifact's real rendered px (10.5px body = 7.9pt, smaller
      than Jake's 11pt). px (not pt) on purpose — that's what the artifact actually drew. */
-  --ff: 'Georgia', Times, serif;
   --fs: 10.5px;
   --lh: 1.24;
   --pad-top: 0.34in;
@@ -173,3 +171,13 @@
   --bullet-align: justify;
   --skills-lh: 1.24;
 }
+
+/* ── Font axis ────────────────────────────────────────────────────────────────
+   Font is independent of template, so any layout can pair with any face. Set via
+   data-font (from profile.yaml). Only fonts confirmed installed with full bold/
+   italic families are offered. No data-font → the .page default (Calibri). */
+[data-font="calibri"] .page { --ff: 'Calibri', 'Helvetica Neue', Arial, sans-serif; }
+[data-font="times"] .page   { --ff: 'Times New Roman', Times, serif; }
+[data-font="georgia"] .page { --ff: 'Georgia', Times, serif; }
+[data-font="cambria"] .page { --ff: 'Cambria', Georgia, serif; }
+[data-font="arial"] .page   { --ff: 'Arial', 'Helvetica Neue', sans-serif; }
