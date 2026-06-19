@@ -12,15 +12,40 @@
 }
 
 .page {
+  /* Template style tokens. Defaults below are the "jake" look (Calibri, roomy).
+     The [data-template="compact"] block at the end of this file overrides them for
+     a denser Times New Roman variant. Page size + padding stay fixed across
+     templates so PageLayout / GeometryCapture math keeps holding. */
+  --ff: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+  --fs: 11pt;
+  --lh: 1.2;
+  --pad-top: 0.5in;
+  --meta-fs: 10pt;
+  --name-fs: 28pt;
+  --name-lh: 1.1;
+  --name-ls: 0.04em;
+  --section-mt: 10pt;
+  --sect-fs: 12pt;
+  --sect-ls: 0.06em;
+  --sect-border: 1.5px;
+  --sect-mb: 5pt;
+  --entry-mb: 6pt;
+  --bullet-indent: 14pt;
+  --bullet-fs: 11pt;
+  --bullet-lh: 1.25;
+  --bullet-mb: 1.5pt;
+  --bullet-align: left;
+  --skills-lh: 1.35;
+
   width: 8.5in;
   min-height: 11in;
   background: #fff;
-  padding: 0.5in 0.5in calc(0.5in - 9px);
+  padding: var(--pad-top) 0.5in calc(0.5in - 9px);
   box-sizing: border-box;
-  font-family: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
-  font-size: 11pt;
+  font-family: var(--ff);
+  font-size: var(--fs);
   color: #000;
-  line-height: 1.2;
+  line-height: var(--lh);
 }
 
 .header {
@@ -29,15 +54,15 @@
 }
 
 .name {
-  font-size: 28pt;
+  font-size: var(--name-fs);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--name-ls);
   margin: 0;
-  line-height: 1.1;
+  line-height: var(--name-lh);
 }
 
 .contact {
-  font-size: 10pt;
+  font-size: var(--meta-fs);
   margin: 4pt 0 0 0;
 }
 
@@ -46,24 +71,24 @@
 }
 
 .section {
-  margin-top: 10pt;
+  margin-top: var(--section-mt);
 }
 
 .sectionTitle {
-  font-size: 12pt;
+  font-size: var(--sect-fs);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--sect-ls);
   text-transform: uppercase;
-  border-bottom: 1.5px solid #000;
+  border-bottom: var(--sect-border) solid #000;
   padding-bottom: 1pt;
-  margin: 0 0 5pt 0;
+  margin: 0 0 var(--sect-mb) 0;
   /* In print, don't strand a section heading at the bottom of a page — keep it
      with the content that follows it. (No effect on screen, which isn't paginated.) */
   break-after: avoid;
 }
 
 .entry {
-  margin-bottom: 6pt;
+  margin-bottom: var(--entry-mb);
   /* Don't split a single job/project entry across a page break in print. */
   break-inside: avoid;
 }
@@ -88,20 +113,22 @@
 }
 
 .detail {
-  font-size: 10pt;
+  font-size: var(--meta-fs);
   margin: 1pt 0 0 0;
 }
 
 .bullets {
   margin: 2pt 0 0 0;
-  padding-left: 14pt;
+  padding-left: var(--bullet-indent);
   list-style: disc;
 }
 
 .bullets li {
-  font-size: 11pt;
-  line-height: 1.25;
-  margin-bottom: 1.5pt;
+  font-size: var(--bullet-fs);
+  line-height: var(--bullet-lh);
+  margin-bottom: var(--bullet-mb);
+  text-align: var(--bullet-align);
+  text-align-last: left;
 }
 
 .skills {
@@ -113,6 +140,36 @@
 }
 
 .skills li {
-  font-size: 11pt;
-  line-height: 1.35;
+  font-size: var(--bullet-fs);
+  line-height: var(--skills-lh);
+}
+
+/* ── Compact template ─────────────────────────────────────────────────────────
+   Denser variant in Georgia: smaller type, tighter vertical rhythm, thin
+   section rules, justified bullet text. Switched on by data-template="compact" on
+   the app shell (see app/active-template.ts + page.tsx). Page margins are left
+   untouched so pagination/geometry stay valid. */
+[data-template="compact"] .page {
+  /* Sizes mirror the source artifact's real rendered px (10.5px body = 7.9pt, smaller
+     than Jake's 11pt). px (not pt) on purpose — that's what the artifact actually drew. */
+  --ff: 'Georgia', Times, serif;
+  --fs: 10.5px;
+  --lh: 1.24;
+  --pad-top: 0.34in;
+  --meta-fs: 9.5px;
+  --name-fs: 24px;
+  --name-lh: 1.1;
+  --name-ls: 0.01em;
+  --section-mt: 7pt;
+  --sect-fs: 12px;
+  --sect-ls: 0.04em;
+  --sect-border: 0.75px;
+  --sect-mb: 3pt;
+  --entry-mb: 5pt;
+  --bullet-indent: 12pt;
+  --bullet-fs: 10.5px;
+  --bullet-lh: 1.24;
+  --bullet-mb: 1.5pt;
+  --bullet-align: justify;
+  --skills-lh: 1.24;
 }

@@ -5,6 +5,7 @@ import type { Resume } from './types'
 import ResumeView from './components/Resume'
 import ExportButton from './components/ExportButton'
 import BadgeToggle from './components/BadgeToggle'
+import { ACTIVE_TEMPLATE } from './active-template'
 import s from './components/resume.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -15,7 +16,7 @@ export default function Page() {
   const data = yaml.load(raw) as Resume
 
   return (
-    <main className={s.shell} data-shell>
+    <main className={s.shell} data-shell data-template={ACTIVE_TEMPLATE}>
       <div data-zoom-wrap style={{ transform: 'scale(0.75)', transformOrigin: 'top center' }}>
         <ResumeView data={data} />
       </div>
