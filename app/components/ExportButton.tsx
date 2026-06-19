@@ -1,57 +1,39 @@
 'use client'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 export default function ExportButton() {
-  useEffect(() => {
-    const getWrap = () => document.querySelector<HTMLElement>('[data-zoom-wrap]')
-    const getShell = () => document.querySelector<HTMLElement>('[data-shell]')
+  const [busy, setBusy] = useState(false)
 
-    const before = () => {
-      const shell = getShell()
-      if (shell) {
-        shell.dataset.savedCss = shell.style.cssText
-        shell.style.cssText = 'background:white;padding:0;min-height:0;display:block'
-      }
-      const wrap = getWrap()
-      if (wrap) {
-        wrap.dataset.savedTransform = wrap.style.transform
-        wrap.dataset.savedMargin = wrap.style.marginBottom
-        wrap.style.transform = 'none'
-        wrap.style.marginBottom = '0'
-      }
-      // Remove min-height from the page element so Chrome paginates based on
-      // actual content height — no blank pages, genuine overflow goes to page 2
-      const resumePage = document.querySelector<HTMLElement>('[data-resume-page]')
-      if (resumePage) {
-        resumePage.dataset.savedMinHeight = resumePage.style.minHeight
-        resumePage.style.minHeight = '0'
-      }
+  // Generate the PDF server-side via the puppeteer /api/pdf route instead of window.print().
+  // page.pdf() emits a real vector PDF with selectable, embedded text (ATS-parsable — not an
+  // image) and exact, code-controlled margins, with NO browser headers/footers (the localhost
+  // URL, date, "1 of 1" chrome window.print() stamps on). The download matches the preview.
+  const save = async () => {
+    if (busy) return
+    setBusy(true)
+    try {
+      const res = await fetch('/api/pdf')
+      if (!res.ok) throw new Error(await res.text())
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'resume.pdf'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      console.error('[export]', err)
+      alert(`PDF export failed: ${err}`)
+    } finally {
+      setBusy(false)
     }
-
-    const after = () => {
-      const shell = getShell()
-      if (shell) shell.style.cssText = shell.dataset.savedCss ?? ''
-      const wrap = getWrap()
-      if (wrap) {
-        wrap.style.transform = wrap.dataset.savedTransform ?? ''
-        wrap.style.marginBottom = wrap.dataset.savedMargin ?? ''
-      }
-      const resumePage = document.querySelector<HTMLElement>('[data-resume-page]')
-      if (resumePage) resumePage.style.minHeight = resumePage.dataset.savedMinHeight ?? ''
-    }
-
-    window.addEventListener('beforeprint', before)
-    window.addEventListener('afterprint', after)
-    return () => {
-      window.removeEventListener('beforeprint', before)
-      window.removeEventListener('afterprint', after)
-    }
-  }, [])
+  }
 
   return (
     <button
       data-export-btn
-      onClick={() => window.print()}
+      onClick={save}
+      disabled={busy}
       style={{
         position: 'fixed',
         bottom: '24px',
@@ -63,12 +45,13 @@ export default function ExportButton() {
         borderRadius: '6px',
         fontSize: '13px',
         fontFamily: 'sans-serif',
-        cursor: 'pointer',
+        cursor: busy ? 'wait' : 'pointer',
+        opacity: busy ? 0.7 : 1,
         boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
         zIndex: 1000,
       }}
     >
-      Save PDF
+      {busy ? 'Generating…' : 'Save PDF'}
     </button>
   )
 }

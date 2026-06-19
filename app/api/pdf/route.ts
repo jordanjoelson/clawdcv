@@ -23,20 +23,22 @@ export async function GET() {
 
     await page.emulateMediaType('print')
 
-    // Measure the actual rendered content height in print mode
-    const contentHeight = await page.evaluate(() => {
-      return (document.querySelector('[data-resume-page]') as HTMLElement | null)?.scrollHeight ?? 1056
-    })
-
-    // Use exact content height so everything lands on one page — no clipping, no scale math
+    // Emit a STANDARD Letter sheet (8.5 × 11in / 612 × 792pt), not a page sized to the
+    // content. A content-fit page (e.g. 8.5 × 10.9in) is non-standard, so viewers and
+    // printers fit it to Letter and it reads as "zoomed out". The resume fits one page
+    // (geometry keeps page.remaining ≥ 0), and in print the element's padding-bottom is
+    // dropped, so content clears 11in with room to spare — no phantom second page.
+    // margin:0 because the page element's own padding already supplies the 0.5in margins.
     const pdf = await page.pdf({
-      width: '8.5in',
-      height: `${contentHeight}px`,
+      format: 'letter',
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
     })
 
-    return new Response(pdf, {
+    // page.pdf() returns Uint8Array<ArrayBufferLike>, which the lib won't accept as a
+    // BodyInit (it could in theory be SharedArrayBuffer-backed). Copy into a fresh
+    // ArrayBuffer-backed Uint8Array, which is a valid response body.
+    return new Response(new Uint8Array(pdf), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename="resume.pdf"',
