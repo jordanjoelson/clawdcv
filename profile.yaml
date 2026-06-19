@@ -13,3 +13,7 @@ template: compact
 #   cambria — serif designed for screen + print
 #   arial   — neutral sans
 font: georgia
+
+# Bold key terms (tech, metrics) in bullets. Write them as **like this** in resume.yaml;
+# true renders them bold, false strips the markers to plain text.
+boldKeywords: true

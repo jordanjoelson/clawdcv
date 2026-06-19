@@ -18,7 +18,7 @@ const BOT_PAD = 39    // calc(0.5in - 9px) — the page's bottom padding; reserv
 const PAGE1_BUDGET = PAGE_H - TOP_PAD - BOT_PAD
 const CONT_BUDGET = PAGE_H - TOP_PAD - TOP_PAD
 
-export default function PageLayout({ data }: { data: Resume }) {
+export default function PageLayout({ data, boldKeywords = true }: { data: Resume; boldKeywords?: boolean }) {
   // breaks[i]..breaks[i+1] is the content slice shown on page i (content-relative px).
   const [breaks, setBreaks] = useState<number[]>([0, PAGE1_BUDGET])
   const probeRef = useRef<HTMLDivElement>(null)
@@ -87,7 +87,7 @@ export default function PageLayout({ data }: { data: Resume }) {
         style={{ position: 'absolute', left: '-9999px', top: 0, visibility: 'hidden', pointerEvents: 'none', minHeight: 0 }}
         aria-hidden="true"
       >
-        <ResumeContent data={data} />
+        <ResumeContent data={data} boldKeywords={boldKeywords} />
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -106,7 +106,7 @@ export default function PageLayout({ data }: { data: Resume }) {
               */}
               <div data-page-clip style={{ height: `${sliceH}px`, overflow: numPages > 1 ? 'hidden' : 'visible' }}>
                 <div data-page-shift style={{ marginTop: `-${start}px` }}>
-                  <ResumeContent data={data} bulletData />
+                  <ResumeContent data={data} bulletData boldKeywords={boldKeywords} />
                 </div>
               </div>
             </div>

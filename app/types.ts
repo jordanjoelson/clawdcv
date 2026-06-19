@@ -55,4 +55,6 @@ export type FontName = 'calibri' | 'times' | 'georgia' | 'cambria' | 'arial'
 export interface Profile {
   template: TemplateName
   font: FontName
+  // Render **bold** markers in bullets as <strong>. When false, markers are stripped to plain text.
+  boldKeywords: boolean
 }

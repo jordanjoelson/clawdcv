@@ -10,7 +10,7 @@ import s from './components/resume.module.css'
 export const dynamic = 'force-dynamic'
 
 // Rendering prefs live in profile.yaml; fall back to sensible defaults if it's absent.
-const DEFAULT_PROFILE: Profile = { template: 'jake', font: 'calibri' }
+const DEFAULT_PROFILE: Profile = { template: 'jake', font: 'calibri', boldKeywords: true }
 
 function loadProfile(): Profile {
   try {
@@ -30,7 +30,7 @@ export default function Page() {
   return (
     <main className={s.shell} data-shell data-template={profile.template} data-font={profile.font}>
       <div data-zoom-wrap style={{ transform: 'scale(0.75)', transformOrigin: 'top center' }}>
-        <ResumeView data={data} />
+        <ResumeView data={data} boldKeywords={profile.boldKeywords} />
       </div>
       {process.env.NODE_ENV === 'development' && <BadgeToggle />}
       <ExportButton name={data.name} />

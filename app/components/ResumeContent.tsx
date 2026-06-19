@@ -1,7 +1,7 @@
 import type { Resume, EducationEntry, ExperienceEntry, ProjectEntry, Skills } from '../types'
 import s from './resume.module.css'
 
-export default function ResumeContent({ data, bulletData }: { data: Resume; bulletData?: boolean }) {
+export default function ResumeContent({ data, bulletData, boldKeywords = true }: { data: Resume; bulletData?: boolean; boldKeywords?: boolean }) {
   return (
     <>
       <Header name={data.name} contact={data.contact} />
@@ -9,14 +9,24 @@ export default function ResumeContent({ data, bulletData }: { data: Resume; bull
         {data.education.map((e, i) => <EducationItem key={i} entry={e} />)}
       </Section>
       <Section title="Experience">
-        {data.experience.map((e, i) => <ExperienceItem key={i} entry={e} bulletData={bulletData} />)}
+        {data.experience.map((e, i) => <ExperienceItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} />)}
       </Section>
       <Section title="Projects">
-        {data.projects.map((e, i) => <ProjectItem key={i} entry={e} bulletData={bulletData} />)}
+        {data.projects.map((e, i) => <ProjectItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} />)}
       </Section>
       <SkillsSection skills={data.skills} />
     </>
   )
+}
+
+// Render a bullet string, parsing **bold** markers into <strong>. When bold is off,
+// the markers are stripped so the text renders plain.
+function bulletNodes(text: string, bold: boolean): React.ReactNode {
+  if (!bold) return text.replace(/\*\*/g, '')
+  return text.split(/(\*\*[^*]+\*\*)/g).filter(Boolean).map((part, i) => {
+    const m = /^\*\*([^*]+)\*\*$/.exec(part)
+    return m ? <strong key={i}>{m[1]}</strong> : part
+  })
 }
 
 function Header({ name, contact }: { name: string; contact: Resume['contact'] }) {
@@ -64,7 +74,7 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
   )
 }
 
-function ExperienceItem({ entry, bulletData }: { entry: ExperienceEntry; bulletData?: boolean }) {
+function ExperienceItem({ entry, bulletData, bold = true }: { entry: ExperienceEntry; bulletData?: boolean; bold?: boolean }) {
   return (
     <div className={s.entry}>
       <div className={s.entryRow}>
@@ -76,13 +86,13 @@ function ExperienceItem({ entry, bulletData }: { entry: ExperienceEntry; bulletD
         <span>{entry.start} – {entry.end}</span>
       </div>
       <ul className={s.bullets} {...(bulletData ? { 'data-bullets': true } : {})}>
-        {entry.bullets.map((b, i) => <li key={i}>{b}</li>)}
+        {entry.bullets.map((b, i) => <li key={i}>{bulletNodes(b, bold)}</li>)}
       </ul>
     </div>
   )
 }
 
-function ProjectItem({ entry, bulletData }: { entry: ProjectEntry; bulletData?: boolean }) {
+function ProjectItem({ entry, bulletData, bold = true }: { entry: ProjectEntry; bulletData?: boolean; bold?: boolean }) {
   return (
     <div className={s.entry}>
       <div className={s.entryRow}>
@@ -93,7 +103,7 @@ function ProjectItem({ entry, bulletData }: { entry: ProjectEntry; bulletData?: 
         <span>{entry.start} – {entry.end}</span>
       </div>
       <ul className={s.bullets} {...(bulletData ? { 'data-bullets': true } : {})}>
-        {entry.bullets.map((b, i) => <li key={i}>{b}</li>)}
+        {entry.bullets.map((b, i) => <li key={i}>{bulletNodes(b, bold)}</li>)}
       </ul>
     </div>
   )

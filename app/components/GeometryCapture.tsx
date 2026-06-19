@@ -132,15 +132,18 @@ export default function GeometryCapture({ data, layout }: { data: Resume; layout
         })
       })
 
-      // Build geometry snapshot for Claude
+      // Build geometry snapshot for Claude. Strip **bold** markers before measuring so the
+      // asterisks don't count toward width (the snapshot keeps the raw text so markers stay
+      // visible). Bold runs render a hair wider than measured here — negligible at these sizes.
+      const plain = (t: string) => t.replace(/\*\*/g, '')
       const experience = data.experience.map(entry => ({
         company: entry.company,
-        bullets: entry.bullets.map((text, i) => ({ i, text, ...measure(text) })),
+        bullets: entry.bullets.map((text, i) => ({ i, text, ...measure(plain(text)) })),
       }))
 
       const projects = data.projects.map(entry => ({
         name: entry.name,
-        bullets: entry.bullets.map((text, i) => ({ i, text, ...measure(text) })),
+        bullets: entry.bullets.map((text, i) => ({ i, text, ...measure(plain(text)) })),
       }))
 
       const pageEl = document.querySelector('[data-resume-page]') as HTMLElement | null
