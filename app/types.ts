@@ -3,6 +3,7 @@ export interface Contact {
   email: string
   linkedin: string
   github: string
+  website?: string
 }
 
 export interface EducationEntry {
@@ -13,6 +14,7 @@ export interface EducationEntry {
   end: string
   gpa?: number
   coursework?: string[]
+  leadership?: string[]
 }
 
 export interface ExperienceEntry {
@@ -32,11 +34,11 @@ export interface ProjectEntry {
   bullets: string[]
 }
 
-export interface Skills {
-  languages: string[]
-  frameworks: string[]
-  tools: string[]
-  libraries: string[]
+// A labeled skills row (e.g. "Languages: Java, Python"). Free-form label so each
+// resume can group skills however it likes, rather than a fixed set of categories.
+export interface SkillGroup {
+  label: string
+  items: string[]
 }
 
 export interface Resume {
@@ -45,16 +47,20 @@ export interface Resume {
   education: EducationEntry[]
   experience: ExperienceEntry[]
   projects: ProjectEntry[]
-  skills: Skills
+  skills: SkillGroup[]
+  // Optional closing section for honors, awards, leadership, extracurriculars — one line each.
+  // `honorsTitle` is the section heading the user wants (e.g. "Leadership", "Awards");
+  // defaults to "Honors & Activities" when omitted.
+  honors?: string[]
+  honorsTitle?: string
 }
 
 export type TemplateName = 'jake' | 'compact'
-export type FontName = 'calibri' | 'times' | 'georgia' | 'cambria' | 'arial'
 
-// Rendering preferences (profile.yaml). Separate from resume content.
+// Rendering preferences (profile.yaml). Separate from resume content. Each template bundles
+// its own font (jake → Calibri, compact → Georgia), so font is not a separate setting.
 export interface Profile {
   template: TemplateName
-  font: FontName
   // Render **bold** markers in bullets as <strong>. When false, markers are stripped to plain text.
   boldKeywords: boolean
 }

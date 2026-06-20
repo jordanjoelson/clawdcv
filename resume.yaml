@@ -1,85 +1,92 @@
-name: Jake Ryan
+name: Jordan Joelson
 contact:
-  phone: "123-456-7890"
-  email: jake@example.com
-  linkedin: linkedin.com/in/jake
-  github: github.com/jake
+  phone: "682-261-6731"
+  email: jordan@jordanjoelson.com
+  linkedin: linkedin.com/in/jordanjoelson
+  github: github.com/jordanjoelson
+  website: jordanjoelson.com
 
 education:
-  - school: Southwestern University
-    degree: Bachelor of Arts in Computer Science, Minor in Business
-    location: Georgetown, TX
-    start: Aug 2018
-    end: May 2021
-    gpa: 3.8
-    coursework: [Data Structures, Algorithms, Operating Systems, Computer Networks]
-
-  - school: Blinn College
-    degree: Associate's in Liberal Arts
-    location: Bryan, TX
-    start: Aug 2014
-    end: May 2018
+  - school: University of Texas at Dallas
+    degree: "Bachelor of Science in Computer Science, GPA: 3.5"
+    location: Richardson, TX
+    start: Aug 2023
+    end: May 2027
+    leadership:
+      - Alpha Kappa Psi (Professional Business Fraternity)
+      - Vice President of UTD Gymnastics Club
 
 experience:
-  - company: Texas A&M University
-    title: Undergraduate Research Assistant
-    location: College Station, TX
-    start: Jun 2020
-    end: Present
+  - company: NASA L'SPACE Proposal Program
+    title: Researcher
+    location: Remote
+    start: Jan 2026
+    end: May 2026
     bullets:
-      - Designed a Django/Redis ingestion pipeline for 8,000+ genomic records, cutting nightly batch runtime by roughly 35%
-      - Refactored a sprawling pandas ETL job into modular tasks, trimming weekly researcher prep from 4 hours to 20 mins
-      - Partnered with 5 graduate students to port legacy R simulations into vectorized NumPy, boosting throughput by 55%
+      - Built prototypes and simulations in Siemens NX, JMARS, MATLAB, and Python to validate mission design feasibility
 
-  - company: Southwestern University
-    title: Information Technology Support Specialist
-    location: Georgetown, TX
-    start: Sep 2018
-    end: Apr 2020
+  - company: Perplexity
+    title: Campus Strategist
+    location: Richardson, TX
+    start: Aug 2025
+    end: Jan 2026
     bullets:
-      - Resolved 1,200+ help-desk tickets spanning email, VPN, printing, and campus Wi-Fi access with a 96% first-touch rate
-      - Imaged, configured, and rolled out 60+ lab and office workstations per semester using FOG and PXE network imaging
-      - Authored step-by-step runbooks that trimmed new technician onboarding from about three weeks down to ten days
+      - Evaluated Comet across real-world user workflows to assess usability, performance, and overall productivity gains
+      - Synthesized user feedback into actionable insights on agentic AI pipelines, workflow integration, and user adoption
 
-  - company: Southwestern University
-    title: Artificial Intelligence Research Assistant
-    location: Georgetown, TX
-    start: May 2019
-    end: Aug 2019
+  - company: Experimental Space Plasma Group
+    title: Research Assistant
+    location: Richardson, TX
+    start: Apr 2025
+    end: Sep 2025
     bullets:
-      - Investigated saliency-map methods for interpreting deep convolutional image classifiers in PyTorch and NumPy stacks
-      - Shared preliminary results to a six-member faculty review committee and secured a second semester of grant funding
-      - Drafted a 14-page writeup detailing methodology, benchmark tables, and clear recommendations for follow-on work
+      - Applied clustering algorithms (K-Means, DBSCAN, HDBSCAN, BIRCH) in Python with Scikit-learn for pattern analysis
+      - Visualized satellite data using dimensionality reduction techniques (PCA, t-SNE, Self-Organizing Maps) for insights
+
+  - company: Teckes
+    title: Co-Founder & Tech Lead
+    location: Dallas, TX
+    start: Jun 2023
+    end: Dec 2024
+    bullets:
+      - Provided end-to-end technical support for 20 business clients, troubleshooting software, hardware, and integrations
+      - Improved website performance through data-driven optimization, increasing traffic by 40% and conversions by 25%
 
 projects:
-  - name: Gitlytics
-    technologies: [Python, Flask, React, PostgreSQL, D3]
-    start: Jun 2020
+  - name: HARP & Jury Platforms
+    technologies: [Open-source hackathon applications and judging infrastructure]
+    start: Jan 2026
     end: Present
     bullets:
-      - Shipped a full-stack web dashboard charting pull-request velocity through the GitHub REST API for 600+ weekly users
-      - Designed interactive D3 visualizations for merge cadence, reviewer load, and per-language commit distribution charts
-      - Wired up GitHub OAuth and a token-bucket cache that cut redundant upstream API requests by roughly 70% in total
+      - Engineered distributed, fault-tolerant infrastructure on **AWS** supporting 2,000+ participants with high availability
+      - Built HARP application portal in **TypeScript, React, and Node.js** handling applicant onboarding and registration flows
+      - Developed Jury platform with **Firebase** and **Tailwind** for live project scoring and real-time leaderboard management
 
-  - name: Simple Fizz Buzz
-    technologies: [Awk, Bash, Java, Matlab, Python, Shell]
-    start: Mar 2020
-    end: Mar 2020
+  - name: Skin Lesion Classifier
+    technologies: [Deep learning classifier for dermatological clinical research]
+    start: Jan 2026
+    end: Apr 2026
     bullets:
-      - Reimplemented FizzBuzz across 6 different languages to compare idiomatic style and measure cold-start runtime cost
-      - Scripted a Bash test harness that executes each test variant in order, diffs the output, and flags any mismatch on exit
+      - Led 3-person GDSC team building 7-class CV classifier in **Python** and **TensorFlow** on 40K labeled dermoscopic images
+      - Implemented **OpenCV** preprocessing and fine-tuned **EfficientNet-B0**, achieving 90%+ accuracy across all 7 classes
+      - Deployed real-time **Gradio** inference interface on **HuggingFace** with confidence scoring for clinical research use cases
 
-  - name: Campus Event Aggregator
-    technologies: [Node.js, Express, MongoDB, React, Tailwind CSS]
-    start: Jan 2020
-    end: May 2020
+  - name: Realvo
+    technologies: [Time-series forecasting research on REIT market returns]
+    start: Jan 2025
+    end: Jun 2025
     bullets:
-      - Collected listings from 9 campus department calendars nightly with Cheerio scrapers and cron-triggered Node.js jobs
-      - Created a responsive React interface letting students filter through upcoming events by category, tag, date, and venue
-      - Hosted the entire stack on a DigitalOcean droplet behind Nginx, sustaining 350+ concurrent users during signup peak
+      - Forecasted REIT market returns in **Python**/**PyTorch** with Temporal Fusion Transformers, beating LSTM by 10–15%
+      - Built automated **JavaScript** pipelines scraping SPG and INVH market datasets via **Cloudflare Workers** for backtesting
+      - Tracked experiments in **Weights & Biases**, iterating on architecture and hyperparameters to optimize forecast results
 
 skills:
-  languages: [Java, Python, C/C++, SQL, JavaScript, HTML/CSS, R]
-  frameworks: [React, Node.js, Flask, FastAPI, JUnit, WordPress, Material-UI]
-  tools: [Git, Docker, TravisCI, Google Cloud Platform, VS Code, PyCharm, IntelliJ]
-  libraries: [pandas, NumPy, Matplotlib, scikit-learn]
+  - label: Languages
+    items: [Java, Python, TypeScript, SQL, C++, Go]
+  - label: Frameworks & Tools
+    items: [Spring Boot, React, Node.js, Next.js, FastAPI, AWS, Docker, Kubernetes, PostgreSQL, Redis, Git]
+  - label: AI Tools
+    items: [Claude, ChatGPT, GitHub Copilot, Cursor, Hugging Face, Weights & Biases]
+
+honors:
+  - "**Hackathons:** 11 attended, 3 wins including LAHacks at UCLA (edge AI vision) and NexHacks at CMU (pickleball CV)"

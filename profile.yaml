@@ -1,18 +1,13 @@
 # Your rendering preferences. Edit here, or let the conversational intake fill it in.
 # (Content lives in resume.yaml; this file is just how it looks.)
 
-# Layout density:
-#   jake    — roomy, classic spacing
-#   compact — denser: smaller type, tighter rhythm, justified bullets
-template: compact
-
-# Font (only faces confirmed installed with full bold/italic):
-#   calibri — clean sans (default)
-#   times   — Times New Roman, classic serif
-#   georgia — serif, very readable on screen
-#   cambria — serif designed for screen + print
-#   arial   — neutral sans
-font: georgia
+# Template — the layout (each comes with its own font). Intake presents these blurbs:
+#   jake    — "Jake's Resume": the classic single-column template recruiters recognize on
+#             sight, set in Calibri. Roomy spacing, larger type. Best for students / new grads
+#             or anyone with light-to-moderate content who wants a clean, traditional look.
+#   compact — Denser variant in Georgia: smaller type, tighter rhythm, justified bullets. Best
+#             when you have a lot to fit (several roles + projects) and want it all on one page.
+template: jake
 
 # Bold key terms (tech, metrics) in bullets. Write them as **like this** in resume.yaml;
 # true renders them bold, false strips the markers to plain text.

@@ -1,4 +1,4 @@
-import type { Resume, EducationEntry, ExperienceEntry, ProjectEntry, Skills } from '../types'
+import type { Resume, EducationEntry, ExperienceEntry, ProjectEntry, SkillGroup } from '../types'
 import s from './resume.module.css'
 
 export default function ResumeContent({ data, bulletData, boldKeywords = true }: { data: Resume; bulletData?: boolean; boldKeywords?: boolean }) {
@@ -15,6 +15,13 @@ export default function ResumeContent({ data, bulletData, boldKeywords = true }:
         {data.projects.map((e, i) => <ProjectItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} />)}
       </Section>
       <SkillsSection skills={data.skills} />
+      {data.honors && data.honors.length > 0 && (
+        <Section title={data.honorsTitle ?? 'Honors & Activities'}>
+          <ul className={s.skills}>
+            {data.honors.map((h, i) => <li key={i} data-fill-line data-fill-section="honors" data-fill-label={`honors[${i}]`}>{bulletNodes(h, boldKeywords)}</li>)}
+          </ul>
+        </Section>
+      )}
     </>
   )
 }
@@ -41,6 +48,12 @@ function Header({ name, contact }: { name: string; contact: Resume['contact'] })
         {contact.linkedin}
         <span className={s.sep}> | </span>
         {contact.github}
+        {contact.website && (
+          <>
+            <span className={s.sep}> | </span>
+            {contact.website}
+          </>
+        )}
       </p>
     </header>
   )
@@ -66,9 +79,12 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
         <span className={s.italic}>{entry.degree}</span>
         <span>{entry.start} – {entry.end}</span>
       </div>
-      {entry.gpa && <p className={s.detail}>GPA: {entry.gpa}</p>}
+      {entry.gpa && <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="gpa">GPA: {entry.gpa}</p>}
       {entry.coursework && entry.coursework.length > 0 && (
-        <p className={s.detail}>Relevant Coursework: {entry.coursework.join(', ')}</p>
+        <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="coursework"><span className={s.bold}>Relevant Coursework:</span> {entry.coursework.join(', ')}</p>
+      )}
+      {entry.leadership && entry.leadership.length > 0 && (
+        <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="leadership"><span className={s.bold}>Leadership:</span> {entry.leadership.join(', ')}</p>
       )}
     </div>
   )
@@ -109,18 +125,12 @@ function ProjectItem({ entry, bulletData, bold = true }: { entry: ProjectEntry; 
   )
 }
 
-function SkillsSection({ skills }: { skills: Skills }) {
-  const rows: [string, string[]][] = [
-    ['Languages', skills.languages],
-    ['Frameworks', skills.frameworks],
-    ['Developer Tools', skills.tools],
-    ['Libraries', skills.libraries],
-  ]
+function SkillsSection({ skills }: { skills: SkillGroup[] }) {
   return (
     <Section title="Technical Skills">
       <ul className={s.skills}>
-        {rows.map(([label, items]) => (
-          <li key={label}>
+        {skills.map(({ label, items }) => (
+          <li key={label} data-fill-line data-fill-section="skills" data-fill-label={label}>
             <span className={s.bold}>{label}: </span>
             {items.join(', ')}
           </li>
