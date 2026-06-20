@@ -94,4 +94,4 @@ Built with Next.js 16 and React 19, TypeScript, and Tailwind. The layout is meas
 
 ---
 
-The goal is simple: help you make one good page, quickly, without handing your life story to a website.
+The goal is simple: help you make a clean, well-measured resume, quickly, while keeping all your information on your own computer.
