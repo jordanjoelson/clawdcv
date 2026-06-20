@@ -1,35 +1,39 @@
+<p align="center">
+  <img src="public/assets/clawdcv.png" alt="clawdcv" width="160">
+</p>
+
 # clawdcv
 
-**Resume editor you talk to.** You say what you did. Robot writes the bullet, counts the pixels, and keeps it on one clean page. Name is `Claude` + `CV`. Yes.
+**A resume editor you talk to.** You tell it what you did, and it writes the bullet point, measures the page, and keeps everything on one clean page. The name just comes from "Claude" plus "CV."
 
-It runs on your machine. Your resume never leaves it.
+It runs on your own computer, and your resume never leaves it.
 
 ---
 
 ## What this is
 
-A local resume tool. Three moving parts:
+This is a resume tool that runs locally on your machine. It has three main parts:
 
-1. **`resume.yaml`** — your resume, as plain text you (or the agent) edit.
-2. **The browser** — draws it live as *Jake's Resume*, the single-column template recruiters know on sight.
-3. **`geometry.json`** — after every save, the page gets *measured*: does each bullet fill its line? does it all fit one sheet? Real pixels, not vibes.
+1. **`resume.yaml`** — your resume, written as plain text. You can edit it yourself, or let the agent edit it for you.
+2. **The browser** — shows your resume live, drawn as *Jake's Resume*, the single-column template that recruiters recognize right away.
+3. **`geometry.json`** — every time you save, the page gets measured. It checks whether each bullet fills its line and whether everything still fits on one page. These are real pixel measurements, not guesses.
 
-You talk to an AI agent (Claude Code) like a person — *"add my new job," "shorten the NASA bullet," "trim it to one page"* — it edits `resume.yaml`, the page reloads, it reads the measurements, and it fixes what's off. You can also just hand-edit `resume.yaml` yourself. Both work.
+You talk to an AI agent (Claude Code) the way you'd talk to a person — for example, *"add my new job,"* *"shorten the NASA bullet,"* or *"trim it to one page."* The agent edits `resume.yaml`, the page reloads, it reads the new measurements, and it fixes whatever is off. If you'd rather, you can also just edit `resume.yaml` yourself. Both ways work.
 
-## Why you want it (and not the other tools)
+## Why you might want it
 
-Other resume sites want your email, your data, and $15/month to let you download your own resume. clawdcv wants none of that.
+A lot of resume websites ask you to make an account, hand over your data, and pay every month just to download your own resume. This tool doesn't do any of that.
 
-- **Stays on your machine.** No account, no upload, no "we improved your resume (and kept a copy)." Local-first. Your data is yours.
-- **It measures, you don't squint.** Most tools (and most humans) eyeball whether a line looks full or whether it spilled to page 2. Here a robot checks every bullet to the pixel and refuses to leave dead space or a phantom second page.
-- **What you see is the PDF.** Screen page count == downloaded page count. No nasty surprise when you hit export.
-- **It writes like a recruiter wants, not like a thesaurus.** The agent follows an actual philosophy (see `philosophy.md`): impact first, real numbers, strong verbs, ATS-safe, no buzzword soup. It pushes back if you ask it to keyword-stuff.
-- **Talk, don't fill forms.** No 40-field wizard. You describe the job, it shapes the bullets and tunes the layout.
-- **Free and open.** It's your resume. Downloading it should not cost money.
+- **It stays on your machine.** There's no account to create and nothing gets uploaded. Your data stays yours.
+- **It measures the layout so you don't have to.** Most tools leave you to eyeball whether a line looks full, or whether your text quietly spilled onto a second page. Here the agent checks every bullet down to the pixel, so you don't end up with awkward empty space or an accidental second page.
+- **What you see is what you download.** The number of pages on screen matches the PDF you export, so there are no surprises at the end.
+- **It writes the way recruiters expect.** The agent follows a clear set of writing rules (see `philosophy.md`): lead with impact, use real numbers, start with strong verbs, and stay readable for the applicant tracking systems that scan resumes. If you ask it to stuff in keywords, it will push back.
+- **You talk to it instead of filling out forms.** There's no long form to work through. You describe the job, and it writes the bullets and adjusts the layout.
+- **It's free and open.** It's your resume, and downloading it shouldn't cost anything.
 
 ## Setup
 
-You need **Node 20+** and **npm**.
+You'll need **Node 20 or newer** and **npm**.
 
 ```bash
 git clone <this-repo>
@@ -38,21 +42,23 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:3000**. You see your resume. Leave that tab open — it redraws itself every time `resume.yaml` is saved.
+Open **http://localhost:3000**. You'll see your resume. Keep that tab open and visible on screen — it redraws itself every time `resume.yaml` is saved.
 
-## How you use it
+## How to use it
 
-**Talk to it.** Open the project in Claude Code (or your agent of choice) and just say what you want:
+You can use it in two ways.
+
+**Talk to it.** Open the project in Claude Code (or another agent) and just say what you want:
 
 > "Here's my LinkedIn dump — build my resume."
 > "Add a Certifications section."
-> "Make the projects punchier and keep it one page."
+> "Make the projects clearer and keep it on one page."
 
-It edits `resume.yaml`, watches `geometry.json`, and gets every bullet to ≥95% line-fill on one page.
+The agent edits `resume.yaml`, watches the measurements in `geometry.json`, and adjusts each bullet until it fills at least 95% of its line and the whole resume fits on one page.
 
-**Or edit by hand.** Open `resume.yaml`, change words, save. The browser reloads and rewrites `geometry.json` so you can see what fit and what didn't.
+**Edit it by hand.** Open `resume.yaml`, change the text, and save. The browser reloads and updates `geometry.json`, so you can see what fit and what didn't.
 
-**Export.** Hit the export button on the page. Out comes a clean PDF with a recruiter-friendly filename.
+**Export it.** Click the export button on the page. You get a clean PDF with a sensible, recruiter-friendly filename.
 
 ## How it works (the loop)
 
@@ -60,31 +66,32 @@ It edits `resume.yaml`, watches `geometry.json`, and gets every bullet to ≥95%
 you edit resume.yaml  ->  browser redraws  ->  geometry.json updates  ->  agent reads it  ->  fixes -> repeat
 ```
 
-`geometry.json` is the smart part. For every bullet it reports the line-fill %, how many lines, and pixels remaining. It flags anything under 95% or any page overflow. Bold keywords (`**like this**`) are measured at their *real* bold width, so a near-full line never silently wraps. Page math matches the PDF exactly.
+`geometry.json` is the part that makes this work. For every bullet, it reports how much of the line is filled, how many lines it uses, and how many pixels are left. It flags any bullet under 95% full and any page that overflows. Bold keywords (written as `**like this**`) are measured at their actual bold width, so a nearly-full line won't quietly wrap once a word is bolded. The page math matches the exported PDF exactly.
 
 ## Templates and preferences
 
-Set these in **`profile.yaml`**:
+You set these in **`profile.yaml`**:
 
-- **`template`** — `jake` (Calibri, roomy, the classic — default) or `compact` (Georgia, denser, fits more on one page). Each template brings its own font.
-- **`boldKeywords`** — `true` renders `**bold**` markers in bullets as bold; `false` strips them to plain text.
+- **`template`** — `jake` (Calibri, roomy, the classic look — this is the default) or `compact` (Georgia, denser, fits more on one page). Each template comes with its own font.
+- **`boldKeywords`** — `true` renders the `**bold**` markers in your bullets as bold text; `false` strips them out to plain text.
+- **`pages`** — `single` keeps everything on one page (the default, and what most students and new grads want); `multi` lets your resume run onto more pages, adding a small running header (your name and "Page X of Y") to each page after the first.
 
-Sections are flexible: contact (with optional website), education (with coursework / leadership), experience, projects, free-form skill groups (any labels you want), and a closing list section whose heading you name (`honorsTitle` — "Honors," "Leadership," "Awards," whatever).
+The sections are flexible: contact (with an optional website), education (with optional coursework, leadership, and awards lines), experience, projects, free-form skill groups with any labels you want, and a closing list section whose heading you choose (`honorsTitle` — "Honors," "Leadership," "Awards," or whatever fits).
 
 ## The files
 
 | File | What it's for |
 |------|---------------|
-| `resume.yaml` | Your resume content. The thing you edit. |
-| `profile.yaml` | Look & feel: template, bold keywords. |
-| `geometry.json` | Generated. The live layout measurements. **Don't edit it.** |
+| `resume.yaml` | Your resume content. The main thing you edit. |
+| `profile.yaml` | Look, feel, and length: template, bold keywords, single or multi page. |
+| `geometry.json` | Generated automatically. The live layout measurements. **Don't edit it.** |
 | `philosophy.md` | How good bullets get written (the agent reads this). |
 | `CLAUDE.md` / `AGENTS.md` | Instructions for the AI agent. |
 
 ## Stack
 
-Next.js 16 + React 19, TypeScript, Tailwind. Layout measured with [`@chenglou/pretext`](https://www.npmjs.com/package/@chenglou/pretext). PDF export via Puppeteer. No database, no cloud, no telemetry.
+Built with Next.js 16 and React 19, TypeScript, and Tailwind. The layout is measured with [`@chenglou/pretext`](https://www.npmjs.com/package/@chenglou/pretext). PDF export uses Puppeteer, with `pdf-lib` adding the headers on multi-page resumes. There's no database, no cloud, and no tracking.
 
 ---
 
-Built to make one good page, fast, without handing your life story to a website. That's it. Go get the job.
+The goal is simple: help you make one good page, quickly, without handing your life story to a website.
