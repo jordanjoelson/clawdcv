@@ -12,3 +12,10 @@ template: jake
 # Bold key terms (tech, metrics) in bullets. Write them as **like this** in resume.yaml;
 # true renders them bold, false strips the markers to plain text.
 boldKeywords: true
+
+# Length — keep everything on ONE page (single) or let it flow onto more pages (multi).
+#   single  — the default, and what most students / new grads want. Overflow is treated as
+#             something to fix (trim or tighten) rather than spill to a second page.
+#   multi   — allow page 2+; continuation pages get a running header (name + "Page X of Y").
+#             Choose this only with genuinely more than a page of strong, relevant content.
+pages: single

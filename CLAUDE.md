@@ -36,9 +36,10 @@ Optional building blocks already wired up (offer these when the user's content c
   "containerWidth": 720,
   "lineHeight": 18.33,
   "page": {
-    "contentHeight": 965,
-    "capacity": 1008,
-    "remaining": 43
+    "contentHeight": 917,
+    "capacity": 960,
+    "remaining": 43,
+    "linesRemaining": 2
   },
   "experience": [
     {
@@ -58,7 +59,13 @@ Optional building blocks already wired up (offer these when the user's content c
 
 `warnings` is pre-computed — any **bullet** whose last line is under 95%, or page overflow, will appear there. Check it first. `fillLines` (skills/education/honors) carry a `fill` % for reference but never warn — see "Non-bullet lines are preference" above.
 
-`page.capacity` is the page-1 printable height (sheet minus the top margin; the PDF drops page 1's bottom margin, so its content can run nearly to the sheet edge). On-screen pagination uses the same budget, so **screen page count == PDF page count** — don't reintroduce a separate page-1 bottom-margin reservation, or the two diverge.
+`page.capacity` is the page-1 printable height = **sheet minus a standard 0.5in margin on BOTH top and bottom** (1056 − 48 − 48 = 960 for the default template). Page 1 reserves a real bottom margin so it reads like a standard resume, not content running to the sheet edge. Screen and PDF stay in lockstep (**screen page count == PDF page count**) because the bottom margin is reserved in three places at once: `PageLayout`'s page-1 budget, `GeometryCapture`'s `capacity`, and `@page :first` in `globals.css`. If you ever change the page margin, change all three together — they must agree, or screen and PDF diverge.
+
+`page.linesRemaining` is the quick answer to "how many more lines can I add to page 1?" — it's `remaining` floored to whole line-heights (conservative; `0` when the page is full or overflowing). Read it straight off `geometry.json`; no need to divide `remaining` by `lineHeight` yourself.
+
+**Multi-page continuation headers.** Page 2+ get a slim running header (name left, "Page X of Y" right, rule under) — `RunningHeader` in `ResumeContent.tsx`, styled from the template `--vars` so it adapts to any template. Page 1 keeps its full masthead only. Mechanics: `PageLayout` tags each section/entry with `data-block-key`, computes the page breaks, and maps each continuation page's start back to its block key; the print flow (card 0) then injects a `.printPageStart` (running header + `break-before: page`) before those blocks, so the PDF breaks at the exact same boundaries as the on-screen cards (screen == PDF). Continuation pages reserve the header's measured height in their budget (`contBudget`). It's fully gated on `numPages > 1`, so single-page resumes are byte-identical to before — do not let a refactor make a one-page resume render a header.
+
+**`profile.pages` — single vs multi.** `profile.yaml` carries a length preference (`single`, the default, or `multi`). It doesn't change rendering — it's *your* intent signal: in `single` mode, treat a `page overflows` warning as something to **fix** (trim/tighten until it's one page); in `multi` mode, overflow is fine and the continuation header handles page 2+. The conversational intake should **ask** this when building a profile, defaulting to single.
 
 ## Sizing a bullet to ≥95% in one pass
 

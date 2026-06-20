@@ -12,11 +12,29 @@ education:
     location: Richardson, TX
     start: Aug 2023
     end: May 2027
-    leadership:
-      - Alpha Kappa Psi (Professional Business Fraternity)
-      - Vice President of UTD Gymnastics Club
+    awards:
+      - 4 wins across 12 hackathons — LAHacks (UCLA), NexHacks (CMU)
 
 experience:
+  - company: Winstead PC
+    title: IT Intern
+    location: Dallas, TX (Hybrid)
+    start: May 2026
+    end: Present
+    bullets:
+      - Design AI-driven automation for document-management workflows, cutting manual overhead for the firm's legal staff
+      - Administer NetDocuments DMS and VDI infrastructure, diagnosing and resolving technical issues firm-wide for staff
+      - Restructure client-matter number taxonomy and folder architecture to streamline document retrieval and compliance
+
+  - company: Cornell Breakthrough Tech
+    title: Machine Learning Fellow
+    location: Remote
+    start: Apr 2026
+    end: Present
+    bullets:
+      - Build and fine-tune classification and regression models in Python with scikit-learn, pandas, NumPy via CRISP-DM
+      - Apply KNN, decision trees, and dimensionality reduction in hands-on Jupyter Notebook labs on real-world problems
+
   - company: NASA L'SPACE Proposal Program
     title: Researcher
     location: Remote
@@ -25,16 +43,7 @@ experience:
     bullets:
       - Built prototypes and simulations in Siemens NX, JMARS, MATLAB, and Python to validate mission design feasibility
 
-  - company: Perplexity
-    title: Campus Strategist
-    location: Richardson, TX
-    start: Aug 2025
-    end: Jan 2026
-    bullets:
-      - Evaluated Comet across real-world user workflows to assess usability, performance, and overall productivity gains
-      - Synthesized user feedback into actionable insights on agentic AI pipelines, workflow integration, and user adoption
-
-  - company: Experimental Space Plasma Group
+  - company: Experimental Space Plasma Group (UTD · UCLA)
     title: Research Assistant
     location: Richardson, TX
     start: Apr 2025
@@ -42,15 +51,6 @@ experience:
     bullets:
       - Applied clustering algorithms (K-Means, DBSCAN, HDBSCAN, BIRCH) in Python with Scikit-learn for pattern analysis
       - Visualized satellite data using dimensionality reduction techniques (PCA, t-SNE, Self-Organizing Maps) for insights
-
-  - company: Teckes
-    title: Co-Founder & Tech Lead
-    location: Dallas, TX
-    start: Jun 2023
-    end: Dec 2024
-    bullets:
-      - Provided end-to-end technical support for 20 business clients, troubleshooting software, hardware, and integrations
-      - Improved website performance through data-driven optimization, increasing traffic by 40% and conversions by 25%
 
 projects:
   - name: HARP & Jury Platforms
@@ -87,6 +87,3 @@ skills:
     items: [Spring Boot, React, Node.js, Next.js, FastAPI, AWS, Docker, Kubernetes, PostgreSQL, Redis, Git]
   - label: AI Tools
     items: [Claude, ChatGPT, GitHub Copilot, Cursor, Hugging Face, Weights & Biases]
-
-honors:
-  - "**Hackathons:** 11 attended, 3 wins including LAHacks at UCLA (edge AI vision) and NexHacks at CMU (pickleball CV)"

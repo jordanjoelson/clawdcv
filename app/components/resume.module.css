@@ -40,7 +40,10 @@
   width: 8.5in;
   min-height: 11in;
   background: #fff;
-  padding: var(--pad-top) 0.5in calc(0.5in - 9px);
+  /* Standard resume margins: 0.5in on all four sides. The bottom 0.5in is a real
+     reserved margin (page 1 included) — PageLayout's budget and @page :first both
+     reserve it too, so the preview and the PDF break to page 2 at the same point. */
+  padding: var(--pad-top) 0.5in 0.5in;
   box-sizing: border-box;
   font-family: var(--ff);
   font-size: var(--fs);
@@ -67,6 +70,27 @@
 }
 
 .sep {
+  color: #555;
+}
+
+/* Continuation-page running header (page 2+): name left, "Page X of Y" right, rule under.
+   Styled entirely from the template's own --vars (border weight, meta font size, section
+   gap), so it adapts automatically to every template — no hardcoded font or sizing. */
+.runningHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: var(--sect-border) solid #000;
+  padding-bottom: 2pt;
+  margin-bottom: var(--sect-mb);
+  font-size: var(--meta-fs);
+}
+
+.runningHeaderName {
+  font-weight: 700;
+}
+
+.runningHeaderPage {
   color: #555;
 }
 

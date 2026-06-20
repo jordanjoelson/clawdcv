@@ -15,6 +15,9 @@ export interface EducationEntry {
   gpa?: number
   coursework?: string[]
   leadership?: string[]
+  // Honors-style line under Education (e.g. competition wins, awards). Renders as an
+  // "Awards:" detail line, same labeled-line shape as coursework/leadership.
+  awards?: string[]
 }
 
 export interface ExperienceEntry {
@@ -63,4 +66,8 @@ export interface Profile {
   template: TemplateName
   // Render **bold** markers in bullets as <strong>. When false, markers are stripped to plain text.
   boldKeywords: boolean
+  // Length preference. 'single' (default) — keep the whole resume on one page; treat page
+  // overflow as something to resolve (trim/tighten). 'multi' — allow it to flow onto page 2+,
+  // where /api/pdf stamps a running header (name + "Page X of Y"). Most new grads want single.
+  pages: 'single' | 'multi'
 }

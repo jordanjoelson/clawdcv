@@ -10,7 +10,7 @@ import s from './components/resume.module.css'
 export const dynamic = 'force-dynamic'
 
 // Rendering prefs live in profile.yaml; fall back to sensible defaults if it's absent.
-const DEFAULT_PROFILE: Profile = { template: 'jake', boldKeywords: true }
+const DEFAULT_PROFILE: Profile = { template: 'jake', boldKeywords: true, pages: 'single' }
 
 function loadProfile(): Profile {
   try {

@@ -207,15 +207,20 @@ export default function GeometryCapture({ data, layout, boldKeywords = true }: {
         })
       })
 
-      // Report height against the PDF's page-1 capacity, so geometry.json agrees with both
-      // the on-screen page count and the downloaded PDF. Print zeroes page 1's bottom padding
-      // (globals.css @media print), so page-1 content may run to `pageHeight - padTop`.
+      // Report height against page-1 capacity, so geometry.json agrees with both the
+      // on-screen page count and the downloaded PDF. Page 1 reserves a standard 0.5in
+      // margin top AND bottom (globals.css @page :first), so the budget is
+      // `pageHeight - padTop - padBot` — content beyond it paginates to page 2.
       const pageEl = probe
       const pcs = pageEl ? getComputedStyle(pageEl) : null
       const padTop = pcs ? parseFloat(pcs.paddingTop) || 48 : 48
       const padBot = pcs ? parseFloat(pcs.paddingBottom) || 0 : 0
       const contentHeight = Math.round((pageEl?.scrollHeight ?? 0) - padTop - padBot)
-      const capacity = Math.round(11 * 96) - padTop
+      const capacity = Math.round(11 * 96) - padTop - padBot
+      const remaining = capacity - contentHeight
+      // Quick "how many more lines can I write?" answer for the agent — the page's leftover
+      // height in line-heights, floored (conservative). 0 when the page is full/overflowing.
+      const linesRemaining = Math.max(0, Math.floor(remaining / lineHeight))
 
       // A bullet may be any number of lines (on request) — what matters is that its LAST
       // line is full (≥95%), so no real estate is wasted. Page overflow is the other
@@ -235,7 +240,7 @@ export default function GeometryCapture({ data, layout, boldKeywords = true }: {
         body: JSON.stringify({
           font, calibration: Math.round(CALIBRATION * 100000) / 100000,
           containerWidth, lineHeight,
-          page: { contentHeight, capacity, remaining: capacity - contentHeight },
+          page: { contentHeight, capacity, remaining, linesRemaining },
           experience, projects, fillLines, warnings,
         }, null, 2),
       })

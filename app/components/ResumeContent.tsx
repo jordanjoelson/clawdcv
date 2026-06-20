@@ -36,6 +36,18 @@ function bulletNodes(text: string, bold: boolean): React.ReactNode {
   })
 }
 
+// Slim header for continuation pages (page 2+) — NOT the page-1 masthead. Name left,
+// "Page X of Y" right, rule under. Rendered as ordinary DOM styled from template --vars,
+// so it tracks whatever template/font is active (see .runningHeader in resume.module.css).
+export function RunningHeader({ name, page, total }: { name: string; page: number; total: number }) {
+  return (
+    <div className={s.runningHeader} data-running-header>
+      <span className={s.runningHeaderName}>{name}</span>
+      <span className={s.runningHeaderPage}>Page {page} of {total}</span>
+    </div>
+  )
+}
+
 function Header({ name, contact }: { name: string; contact: Resume['contact'] }) {
   return (
     <header className={s.header}>
@@ -86,6 +98,9 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
       {entry.leadership && entry.leadership.length > 0 && (
         <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="leadership"><span className={s.bold}>Leadership:</span> {entry.leadership.join(', ')}</p>
       )}
+      {entry.awards && entry.awards.length > 0 && (
+        <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="awards"><span className={s.bold}>Awards:</span> {entry.awards.join(', ')}</p>
+      )}
     </div>
   )
 }
@@ -114,7 +129,8 @@ function ProjectItem({ entry, bulletData, bold = true }: { entry: ProjectEntry; 
       <div className={s.entryRow}>
         <span>
           <span className={s.bold}>{entry.name}</span>
-          <span className={s.tech}> | {entry.technologies.join(', ')}</span>
+          {' | '}
+          <span className={s.tech}>{entry.technologies.join(', ')}</span>
         </span>
         <span>{entry.start} – {entry.end}</span>
       </div>

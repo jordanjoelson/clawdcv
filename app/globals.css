@@ -3,14 +3,17 @@
 /* print pagination + per-page margins: see @media print below */
 @page {
   size: letter;
-  /* Continuation pages (2+) get a 0.5in top/bottom margin so content doesn't hug the
-     sheet edge — matching the top spacing page 1 gets from the page element's padding. */
-  margin: 0.5in 0 0.5in 0;
+  /* Continuation pages (2+): 0.8in top reserves room for the running header that /api/pdf
+     stamps on (0.5in margin above it + the header line + rule), so page content starts below
+     the header instead of under it. 0.5in bottom. Page 1 uses @page :first (no header). */
+  margin: 0.8in 0 0.5in 0;
 }
 @page :first {
-  /* Page 1: top comes from the element's own 0.5in padding; keep @page margins at 0 so
-     the full single-page layout still clears the bottom edge (no phantom blank page). */
-  margin: 0;
+  /* Page 1: top margin comes from the element's own 0.5in padding, so keep @page top at 0
+     to avoid doubling it. Reserve a real 0.5in BOTTOM margin here so page 1 reads like a
+     standard resume and breaks to page 2 at the same point the on-screen preview does
+     (screen page count == PDF page count). */
+  margin: 0 0 0.5in 0;
 }
 
 /* Dev "Show %" toggle: hide the fill badges when switched off (they stay measured). */
@@ -31,11 +34,10 @@ html[data-badges="off"] [data-geo] { display: none !important; }
   [data-resume-page] { display: none !important; }
   [data-page]:not([data-page="0"]) { display: none !important; }
   /*
-    Content reaches ~10.9 of 11in. At 100% scale that ~9px gap to the edge falls inside
-    Chrome's pagination rounding, spawning a phantom blank page (99% scale clears it).
-    Drop the page's own bottom padding in print so the block backs ~0.5in off the edge —
-    the sheet still supplies the bottom whitespace, so it looks identical but prints clean
-    at any scale.
+    Expand page 1 to natural height so @page paginates any real overflow onto sheet 2.
+    Drop the element's own bottom padding in print: the bottom margin is owned by the
+    @page boxes (@page :first reserves 0.5in bottom; continuation pages 0.5in top+bottom),
+    so leaving the element's padding on too would double the bottom margin on the last page.
   */
   [data-page="0"] { height: auto !important; overflow: visible !important; padding-bottom: 0 !important; }
   [data-page="0"] [data-page-clip] {

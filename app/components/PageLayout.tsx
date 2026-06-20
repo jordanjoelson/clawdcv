@@ -1,29 +1,31 @@
 'use client'
 import { useState, useLayoutEffect, useRef } from 'react'
-import ResumeContent from './ResumeContent'
+import ResumeContent, { RunningHeader } from './ResumeContent'
 import GeometryCapture from './GeometryCapture'
 import type { Resume } from '../types'
 import s from './resume.module.css'
 
 const PAGE_H = 1056   // 11in at 96dpi
 const TOP_PAD = 48    // 0.5in
+const BOT_PAD = 48    // 0.5in
 
 // Per-page content budgets — these must match what the DOWNLOADED PDF does, so the
 // on-screen page count equals the printed page count (what the user actually submits).
-// In print (globals.css @media print) page 1 sets `padding-bottom: 0`, so its content can
-// run all the way to the sheet's bottom edge — page 1 does NOT reserve a bottom margin.
-// Reserving one on screen (the old behaviour) made content that fits the PDF on one page
-// spill onto a phantom screen page 2. So page 1's budget drops the bottom pad to match.
-// Page 2+ mirror the @page continuation margins (0.5in top + 0.5in bottom).
-//   page 1   — pad-top only (print zeroes pad-bottom)        → 1056 - 48      = 1008
-//   page 2+  — @page top (48) + @page bottom (48)            → 1056 - 48 - 48 = 960
-const PAGE1_BUDGET = PAGE_H - TOP_PAD
-const CONT_BUDGET = PAGE_H - TOP_PAD - TOP_PAD
+// EVERY page reserves a standard 0.5in margin on BOTH top and bottom, so page 1 reads
+// like a real resume instead of running to the sheet's bottom edge. Page 1's bottom
+// margin is reserved by @page :first (globals.css) in print, so print breaks to page 2
+// at the same point the on-screen preview does — keeping screen pages == PDF pages.
+// Continuation pages (2+) additionally give up the running-header height — measured live
+// in compute() (see contBudget), not a constant, so it tracks each template's font/spacing.
+//   page 1   — top 48 + bottom 48                 → 1056 - 48 - 48        = 960
+//   page 2+  — top 48 + bottom 48 + running header → 1056 - 48 - 48 - hdr  < 960
+const PAGE1_BUDGET = PAGE_H - TOP_PAD - BOT_PAD
 
 export default function PageLayout({ data, boldKeywords = true }: { data: Resume; boldKeywords?: boolean }) {
   // breaks[i]..breaks[i+1] is the content slice shown on page i (content-relative px).
   const [breaks, setBreaks] = useState<number[]>([0, PAGE1_BUDGET])
   const probeRef = useRef<HTMLDivElement>(null)
+  const headerProbeRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const probe = probeRef.current
@@ -37,9 +39,17 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
       const topPad = parseFloat(cs.paddingTop) || TOP_PAD
       const botPad = parseFloat(cs.paddingBottom) || 0
       const total = probe.scrollHeight - topPad - botPad
-      // Page 1 doesn't reserve a bottom margin (print zeroes it), so its content budget is
-      // the sheet height minus only the top pad — matching the PDF (see constants above).
-      const page1Budget = PAGE_H - topPad
+      // Page 1 reserves a standard 0.5in margin top AND bottom (same as continuation
+      // pages), so its budget is the sheet minus both pads — matching the PDF, where
+      // @page :first reserves the bottom margin (see constants above).
+      const page1Budget = PAGE_H - topPad - botPad
+      // Continuation pages (2+) additionally give up the running header's height (measured
+      // live from a hidden probe, incl. its bottom margin — so it adapts to each template's
+      // font/spacing rather than a hardcoded constant). Only used once content spills past
+      // page 1, so single-page resumes are unaffected.
+      const hEl = headerProbeRef.current?.querySelector('[data-running-header]') as HTMLElement | null
+      const headerH = hEl ? hEl.offsetHeight + (parseFloat(getComputedStyle(hEl).marginBottom) || 0) : 0
+      const contBudget = PAGE_H - topPad - botPad - headerH
 
       // Clean break points (content-relative): before each section, and before each entry
       // except a section's first — keeping a heading bound to its first entry, mirroring
@@ -57,7 +67,7 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
       let start = 0
       let page = 0
       while (start < total) {
-        const limit = start + (page === 0 ? page1Budget : CONT_BUDGET)
+        const limit = start + (page === 0 ? page1Budget : contBudget)
         if (total <= limit) break
         const fit = points.filter(p => p > start && p <= limit)
         const next = fit.length ? fit[fit.length - 1] : limit // hard-cut if a block exceeds a page
@@ -94,12 +104,27 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
         <ResumeContent data={data} boldKeywords={boldKeywords} />
       </div>
 
+      {/* Hidden probe: measures the running header's height for the continuation-page budget,
+          styled by .page so it inherits the active template's --vars (font, spacing, border). */}
+      <div
+        ref={headerProbeRef}
+        className={s.page}
+        style={{ position: 'absolute', left: '-9999px', top: 0, visibility: 'hidden', pointerEvents: 'none', minHeight: 0, height: 'auto' }}
+        aria-hidden="true"
+      >
+        <RunningHeader name={data.name} page={2} total={2} />
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {Array.from({ length: numPages }).map((_, i) => {
           const start = breaks[i]
           const sliceH = breaks[i + 1] - start
           return (
             <div key={i} data-page={i} className={s.page} style={{ minHeight: 'unset', height: `${PAGE_H}px`, overflow: 'hidden' }}>
+              {/* Page 2+ get the slim running header (name + "Page X of Y" + rule); page 1
+                  keeps its full masthead from ResumeContent. Its height is reserved in the
+                  continuation budget (contBudget) so the clipped slice below still fits. */}
+              {i > 0 && <RunningHeader name={data.name} page={i + 1} total={numPages} />}
               {/*
                 Inner clip shows exactly this page's slice [start, start+sliceH]; its height
                 is the slice height, so nothing from the next block peeks in (no shaved
@@ -110,6 +135,9 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
               */}
               <div data-page-clip style={{ height: `${sliceH}px`, overflow: numPages > 1 ? 'hidden' : 'visible' }}>
                 <div data-page-shift style={{ marginTop: `-${start}px` }}>
+                  {/* PDF page-2+ headers are stamped onto the rendered PDF by /api/pdf
+                      (pdf-lib); the on-screen page-2+ headers come from the cards above. So no
+                      break plan is injected into the content flow. */}
                   <ResumeContent data={data} bulletData boldKeywords={boldKeywords} />
                 </div>
               </div>
