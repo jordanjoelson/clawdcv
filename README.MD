@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# clawdcv
 
-## Getting Started
+**Resume editor you talk to.** You say what you did. Robot writes the bullet, counts the pixels, and keeps it on one clean page. Name is `Claude` + `CV`. Yes.
 
-First, run the development server:
+It runs on your machine. Your resume never leaves it.
+
+---
+
+## What this is
+
+A local resume tool. Three moving parts:
+
+1. **`resume.yaml`** — your resume, as plain text you (or the agent) edit.
+2. **The browser** — draws it live as *Jake's Resume*, the single-column template recruiters know on sight.
+3. **`geometry.json`** — after every save, the page gets *measured*: does each bullet fill its line? does it all fit one sheet? Real pixels, not vibes.
+
+You talk to an AI agent (Claude Code) like a person — *"add my new job," "shorten the NASA bullet," "trim it to one page"* — it edits `resume.yaml`, the page reloads, it reads the measurements, and it fixes what's off. You can also just hand-edit `resume.yaml` yourself. Both work.
+
+## Why you want it (and not the other tools)
+
+Other resume sites want your email, your data, and $15/month to let you download your own resume. clawdcv wants none of that.
+
+- **Stays on your machine.** No account, no upload, no "we improved your resume (and kept a copy)." Local-first. Your data is yours.
+- **It measures, you don't squint.** Most tools (and most humans) eyeball whether a line looks full or whether it spilled to page 2. Here a robot checks every bullet to the pixel and refuses to leave dead space or a phantom second page.
+- **What you see is the PDF.** Screen page count == downloaded page count. No nasty surprise when you hit export.
+- **It writes like a recruiter wants, not like a thesaurus.** The agent follows an actual philosophy (see `philosophy.md`): impact first, real numbers, strong verbs, ATS-safe, no buzzword soup. It pushes back if you ask it to keyword-stuff.
+- **Talk, don't fill forms.** No 40-field wizard. You describe the job, it shapes the bullets and tunes the layout.
+- **Free and open.** It's your resume. Downloading it should not cost money.
+
+## Setup
+
+You need **Node 20+** and **npm**.
 
 ```bash
+git clone <this-repo>
+cd clawdcv
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open **http://localhost:3000**. You see your resume. Leave that tab open — it redraws itself every time `resume.yaml` is saved.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How you use it
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Talk to it.** Open the project in Claude Code (or your agent of choice) and just say what you want:
 
-## Learn More
+> "Here's my LinkedIn dump — build my resume."
+> "Add a Certifications section."
+> "Make the projects punchier and keep it one page."
 
-To learn more about Next.js, take a look at the following resources:
+It edits `resume.yaml`, watches `geometry.json`, and gets every bullet to ≥95% line-fill on one page.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Or edit by hand.** Open `resume.yaml`, change words, save. The browser reloads and rewrites `geometry.json` so you can see what fit and what didn't.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Export.** Hit the export button on the page. Out comes a clean PDF with a recruiter-friendly filename.
 
-## Deploy on Vercel
+## How it works (the loop)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+you edit resume.yaml  ->  browser redraws  ->  geometry.json updates  ->  agent reads it  ->  fixes -> repeat
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`geometry.json` is the smart part. For every bullet it reports the line-fill %, how many lines, and pixels remaining. It flags anything under 95% or any page overflow. Bold keywords (`**like this**`) are measured at their *real* bold width, so a near-full line never silently wraps. Page math matches the PDF exactly.
+
+## Templates and preferences
+
+Set these in **`profile.yaml`**:
+
+- **`template`** — `jake` (Calibri, roomy, the classic — default) or `compact` (Georgia, denser, fits more on one page). Each template brings its own font.
+- **`boldKeywords`** — `true` renders `**bold**` markers in bullets as bold; `false` strips them to plain text.
+
+Sections are flexible: contact (with optional website), education (with coursework / leadership), experience, projects, free-form skill groups (any labels you want), and a closing list section whose heading you name (`honorsTitle` — "Honors," "Leadership," "Awards," whatever).
+
+## The files
+
+| File | What it's for |
+|------|---------------|
+| `resume.yaml` | Your resume content. The thing you edit. |
+| `profile.yaml` | Look & feel: template, bold keywords. |
+| `geometry.json` | Generated. The live layout measurements. **Don't edit it.** |
+| `philosophy.md` | How good bullets get written (the agent reads this). |
+| `CLAUDE.md` / `AGENTS.md` | Instructions for the AI agent. |
+
+## Stack
+
+Next.js 16 + React 19, TypeScript, Tailwind. Layout measured with [`@chenglou/pretext`](https://www.npmjs.com/package/@chenglou/pretext). PDF export via Puppeteer. No database, no cloud, no telemetry.
+
+---
+
+Built to make one good page, fast, without handing your life story to a website. That's it. Go get the job.
