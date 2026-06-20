@@ -7,15 +7,17 @@ import s from './resume.module.css'
 
 const PAGE_H = 1056   // 11in at 96dpi
 const TOP_PAD = 48    // 0.5in
-const BOT_PAD = 39    // calc(0.5in - 9px) — the page's bottom padding; reserved on page 1 too
 
-// Per-page content budgets. Page 1 now reserves its bottom margin as well, so overflow
-// breaks to page 2 instead of spilling into the bottom margin — and this matches the
-// geometry overflow warning, which fires at this same point (scrollHeight > PAGE_H).
-// Page 2+ mirror the print @page margins in globals.css.
-//   page 1   — element pad-top (48) + pad-bottom (39)        → 1056 - 48 - 39 = 969
+// Per-page content budgets — these must match what the DOWNLOADED PDF does, so the
+// on-screen page count equals the printed page count (what the user actually submits).
+// In print (globals.css @media print) page 1 sets `padding-bottom: 0`, so its content can
+// run all the way to the sheet's bottom edge — page 1 does NOT reserve a bottom margin.
+// Reserving one on screen (the old behaviour) made content that fits the PDF on one page
+// spill onto a phantom screen page 2. So page 1's budget drops the bottom pad to match.
+// Page 2+ mirror the @page continuation margins (0.5in top + 0.5in bottom).
+//   page 1   — pad-top only (print zeroes pad-bottom)        → 1056 - 48      = 1008
 //   page 2+  — @page top (48) + @page bottom (48)            → 1056 - 48 - 48 = 960
-const PAGE1_BUDGET = PAGE_H - TOP_PAD - BOT_PAD
+const PAGE1_BUDGET = PAGE_H - TOP_PAD
 const CONT_BUDGET = PAGE_H - TOP_PAD - TOP_PAD
 
 export default function PageLayout({ data, boldKeywords = true }: { data: Resume; boldKeywords?: boolean }) {
@@ -33,9 +35,11 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
       // also keeps page 1's budget aligned with the geometry overflow warning per-template.
       const cs = getComputedStyle(probe)
       const topPad = parseFloat(cs.paddingTop) || TOP_PAD
-      const botPad = parseFloat(cs.paddingBottom) || BOT_PAD
+      const botPad = parseFloat(cs.paddingBottom) || 0
       const total = probe.scrollHeight - topPad - botPad
-      const page1Budget = PAGE_H - topPad - botPad
+      // Page 1 doesn't reserve a bottom margin (print zeroes it), so its content budget is
+      // the sheet height minus only the top pad — matching the PDF (see constants above).
+      const page1Budget = PAGE_H - topPad
 
       // Clean break points (content-relative): before each section, and before each entry
       // except a section's first — keeping a heading bound to its first entry, mirroring
@@ -117,7 +121,7 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
       {/* Measures geometry + draws the dev fill badges. Rendered here (not page.tsx) and
           keyed on the page breaks so it re-runs after slicing settles, keeping badges aligned. */}
       {process.env.NODE_ENV === 'development' && (
-        <GeometryCapture data={data} layout={breaks.join(',')} />
+        <GeometryCapture data={data} layout={breaks.join(',')} boldKeywords={boldKeywords} />
       )}
     </>
   )
