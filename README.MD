@@ -5,6 +5,16 @@
 # clawdcv
 
 <p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg"></a>
+  <img alt="Built with Claude Code" src="https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white">
+  <a href="AGENTS.md"><img alt="Works with any agent" src="https://img.shields.io/badge/agents-AGENTS.md-555"></a>
+  <img alt="Node 20+" src="https://img.shields.io/badge/Node-20%2B-339933?logo=nodedotjs&logoColor=white">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white">
+  <img alt="Tailwind" src="https://img.shields.io/badge/Tailwind-38B2AC?logo=tailwindcss&logoColor=white">
+</p>
+
+<p align="center">
   <a href="#setup">Setup</a> ·
   <a href="#how-to-use-it">Usage</a> ·
   <a href="CONTRIBUTING.md">Contributing</a> ·
