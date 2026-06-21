@@ -18,11 +18,14 @@ Write every experience/project bullet as **impact first, then how** — the XYZ 
 **Before:** Worked on the data pipeline to help the team.
 **After:** Cut nightly batch runtime 35% by rebuilding the ingestion pipeline in Django/Redis.
 
-## Quantify relentlessly
+## Quantify as a theme
 
-Numbers are the single biggest credibility lever. For each bullet ask: *how much, how many,
-how fast, how often, what scale?* Approximate honestly ("~", "500+", "roughly") rather than
-leaving it vague. Never invent precise figures the user can't defend in an interview.
+Numbers are the single biggest credibility lever, so make quantification a *theme* across the
+resume, not a quota on every line. For each bullet ask *how much, how many, how fast, how often,
+what scale?* and lead with the figure when a real one exists. Approximate honestly ("~", "500+",
+"roughly") rather than leaving it vague; when no honest number exists, a strong verb plus concrete
+scope stands on its own. Never invent precise figures the user can't defend in an interview, and
+don't force a number where there isn't one.
 
 ## Verbs and word choice
 
