@@ -99,11 +99,18 @@ you edit resume.yaml  ->  browser redraws  ->  geometry.json updates  ->  agent 
 
 You set these in **`profile.yaml`**:
 
-- **`template`**: `jake` (Calibri, roomy, the classic look, and the default) or `compact` (Georgia, denser, fits more on one page). Each template comes with its own font.
+- **`template`**: the layout to render in (each one bundles its own font). Pick one:
+  - `jake`: the classic single-column template recruiters recognize on sight, in Calibri. Roomy and traditional. The default; best for students and new grads.
+  - `compact`: a denser Georgia variant with justified bullets. Best when you have a lot to fit on one page.
+  - `cns`: the UT Austin College of Natural Sciences format (Calibri 12pt, centered name, underlined headings). For UT Austin CNS or other STEM undergrads who want their advisors' standard layout.
+  - `business`: the UT Austin McCombs business format (Times New Roman, centered name, rule-underlined headings). For business, finance, or consulting applicants who want a classic serif resume.
+  - `modern`: "Modern Accent," a sans-serif look with teal headings, plus an optional Professional Summary and a Core Competencies pill grid. Contemporary but still ATS-safe.
+  - `professional`: an experience-first layout for graduates, leading with Experience and condensing Education to one line at the bottom. For when your work matters more than your degree.
+  - `jake-pro`: the classic Jake look with the experience-first post-grad ordering. For Jake fans who've graduated.
 - **`boldKeywords`**: `true` renders the `**bold**` markers in your bullets as bold text; `false` strips them out to plain text.
 - **`pages`**: `single` keeps everything on one page (the default, and what most students and new grads want); `multi` lets your resume run onto more pages, adding a small running header (your name and "Page X of Y") to each page after the first.
 
-The sections are flexible: contact (with an optional website), education (with optional coursework, leadership, and awards lines), experience, projects, free-form skill groups with any labels you want, and a closing list section whose heading you choose (`honorsTitle`: "Honors," "Leadership," "Awards," or whatever fits).
+The sections are flexible: an optional Professional Summary and a Core Competencies grid (used by the `modern` template), contact (with an optional website and location), education (with optional coursework, leadership, and awards lines), experience, projects, free-form skill groups with any labels you want, an optional Leadership / Community Involvement section, and a closing list section whose heading you choose (`honorsTitle`: "Honors," "Leadership," "Awards," or whatever fits). Most section headings are renamable too (`experienceTitle`, `skillsTitle`, `competenciesTitle`, `leadershipTitle`, `honorsTitle`), so you can match a specific format.
 
 ## The files
 
@@ -113,7 +120,7 @@ The sections are flexible: contact (with an optional website), education (with o
 | `profile.yaml` | Look, feel, and length: template, bold keywords, single or multi page. |
 | `geometry.json` | Generated automatically. The live layout measurements. **Don't edit it.** |
 | `philosophy.md` | How good bullets get written (the agent reads this). |
-| `CLAUDE.md` / `AGENTS.md` | Instructions for the AI agent. |
+| `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` | Instructions for the AI agent (any agent finds its way to the same manual). |
 
 ## Stack
 
