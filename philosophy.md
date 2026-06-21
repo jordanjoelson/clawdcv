@@ -64,6 +64,7 @@ Recruiters and many ATS rubrics explicitly score for these competencies — not 
 Screeners — human and software — skim top-down, so make the signal easy to extract and consistent:
 
 - **Bullet length:** one line per bullet (per the geometry rules in `CLAUDE.md`), and keep bullets roughly even in length. A giant bullet next to a one-word stub reads as careless.
+- **Bullet count — balance, not uniformity:** consistency reads as intentional, so keep entries in a tight band (≈2–4 bullets) and never leave a lone one-bullet stub next to a five-bullet entry. But *balanced* is the goal, not *identical*: weight more bullets toward the most recent and most relevant roles, and never pad a weak role with filler just to match a strong one (that breaks Honesty and Quantify). A current role with 3 and older roles with 2 is a deliberate relevance gradient, not an inconsistency. When space is tight (see `CLAUDE.md` — page must stay full but not overflow), protect the one-page fit over forcing equal counts.
 - **Consistent punctuation:** pick one rule and apply it to *every* bullet. Default here: **no terminal periods** (bullets are fragments). Whatever the choice, it must be uniform across the whole resume.
 - **Consistent verb tense:** every bullet opens with a strong action verb; **past tense for past roles, present for the current role**, never mixed within an entry (see Voice and mechanics).
 - **Front-load the keyword** (skill, tool, or outcome) that matters most so it survives a 6-second skim and top-down ATS parsing.
