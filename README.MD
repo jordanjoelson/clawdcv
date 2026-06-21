@@ -21,9 +21,9 @@
   <a href="philosophy.md">Philosophy</a>
 </p>
 
-**A resume editor you talk to.** You tell it what you did, and it writes the bullet point, measures the page, and keeps everything on one clean page. The name just comes from "Claude" plus "CV."
+**A resume editor you talk to. Your resume never leaves your machine. It measures the page to the pixel. No account, no subscription.**
 
-It runs on your own computer, and your resume never leaves it.
+You tell it what you did, and it writes the bullet point, measures the page, and keeps everything on one clean page. It's built for **Claude Code** and works with any coding agent (Cursor, Codex, Gemini CLI, and others), and you can edit the file by hand too. The name just comes from "Claude" plus "CV."
 
 ---
 
@@ -31,11 +31,11 @@ It runs on your own computer, and your resume never leaves it.
 
 This is a resume tool that runs locally on your machine. It has three main parts:
 
-1. **`resume.yaml`** — your resume, written as plain text. You can edit it yourself, or let the agent edit it for you.
-2. **The browser** — shows your resume live, drawn as *Jake's Resume*, the single-column template that recruiters recognize right away.
-3. **`geometry.json`** — every time you save, the page gets measured. It checks whether each bullet fills its line and whether everything still fits on one page. These are real pixel measurements, not guesses.
+1. **`resume.yaml`**: your resume, written as plain text. You can edit it yourself, or let the agent edit it for you.
+2. **The browser**: shows your resume live, drawn as *Jake's Resume*, the single-column template that recruiters recognize right away.
+3. **`geometry.json`**: every time you save, the page gets measured. It checks whether each bullet fills its line and whether everything still fits on one page. These are real pixel measurements, not guesses.
 
-You talk to an AI agent (Claude Code) the way you'd talk to a person — for example, *"add my new job,"* *"shorten the NASA bullet,"* or *"trim it to one page."* The agent edits `resume.yaml`, the page reloads, it reads the new measurements, and it fixes whatever is off. If you'd rather, you can also just edit `resume.yaml` yourself. Both ways work.
+You talk to an AI agent (Claude Code by default, or another like Cursor or Codex) the way you'd talk to a person, for example *"add my new job,"* *"shorten the NASA bullet,"* or *"trim it to one page."* The agent edits `resume.yaml`, the page reloads, it reads the new measurements, and it fixes whatever is off. If you'd rather, you can also just edit `resume.yaml` yourself. Both ways work.
 
 ## Why you might want it
 
@@ -52,24 +52,34 @@ A lot of resume websites ask you to make an account, hand over your data, and pa
 
 You'll need **Node 20 or newer** and **npm**.
 
+One line that scaffolds a fresh copy (resume content plus agent instructions) into `my-resume/` and starts the dev server:
+
 ```bash
-git clone <this-repo>
+npx degit jordanjoelson/clawdcv my-resume && cd my-resume && npm install && npm run dev
+```
+
+Or clone it the usual way:
+
+```bash
+git clone https://github.com/jordanjoelson/clawdcv.git
 cd clawdcv
 npm install
 npm run dev
 ```
 
-Open **http://localhost:3000**. You'll see your resume. Keep that tab open and visible on screen — it redraws itself every time `resume.yaml` is saved.
+Open **http://localhost:3000**. You'll see your resume. Keep that tab open and visible on screen, since it redraws itself every time `resume.yaml` is saved.
 
 ## How to use it
 
 You can use it in two ways.
 
-**Talk to it.** Open the project in Claude Code (or another agent) and just say what you want:
+**Talk to it.** Open the project in **Claude Code** (the default and best-supported) and just say what you want:
 
-> "Here's my LinkedIn dump — build my resume."
+> "Here's my LinkedIn dump, build my resume."
 > "Add a Certifications section."
 > "Make the projects clearer and keep it on one page."
+
+Other coding agents work too: Codex, Cursor, Gemini CLI, or anything that reads `AGENTS.md`. They pick up the same workflow from `AGENTS.md`, which points them at the operating manual in `CLAUDE.md` and `philosophy.md`.
 
 The agent edits `resume.yaml`, watches the measurements in `geometry.json`, and adjusts each bullet until it fills at least 95% of its line and the whole resume fits on one page.
 
@@ -89,11 +99,11 @@ you edit resume.yaml  ->  browser redraws  ->  geometry.json updates  ->  agent 
 
 You set these in **`profile.yaml`**:
 
-- **`template`** — `jake` (Calibri, roomy, the classic look — this is the default) or `compact` (Georgia, denser, fits more on one page). Each template comes with its own font.
-- **`boldKeywords`** — `true` renders the `**bold**` markers in your bullets as bold text; `false` strips them out to plain text.
-- **`pages`** — `single` keeps everything on one page (the default, and what most students and new grads want); `multi` lets your resume run onto more pages, adding a small running header (your name and "Page X of Y") to each page after the first.
+- **`template`**: `jake` (Calibri, roomy, the classic look, and the default) or `compact` (Georgia, denser, fits more on one page). Each template comes with its own font.
+- **`boldKeywords`**: `true` renders the `**bold**` markers in your bullets as bold text; `false` strips them out to plain text.
+- **`pages`**: `single` keeps everything on one page (the default, and what most students and new grads want); `multi` lets your resume run onto more pages, adding a small running header (your name and "Page X of Y") to each page after the first.
 
-The sections are flexible: contact (with an optional website), education (with optional coursework, leadership, and awards lines), experience, projects, free-form skill groups with any labels you want, and a closing list section whose heading you choose (`honorsTitle` — "Honors," "Leadership," "Awards," or whatever fits).
+The sections are flexible: contact (with an optional website), education (with optional coursework, leadership, and awards lines), experience, projects, free-form skill groups with any labels you want, and a closing list section whose heading you choose (`honorsTitle`: "Honors," "Leadership," "Awards," or whatever fits).
 
 ## The files
 
