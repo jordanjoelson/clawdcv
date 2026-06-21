@@ -43,3 +43,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local .docx extractions + personal resume backup (not part of the app)
+_docx_*/
+resume.mine.yaml

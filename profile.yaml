@@ -7,7 +7,28 @@
 #             or anyone with light-to-moderate content who wants a clean, traditional look.
 #   compact — Denser variant in Georgia: smaller type, tighter rhythm, justified bullets. Best
 #             when you have a lot to fit (several roles + projects) and want it all on one page.
-template: jake
+#   cns     — "UT Austin CNS Resume": the official general-resume format from the University of
+#             Texas at Austin, College of Natural Sciences (CNS) career services. Calibri 12pt,
+#             small centered name, pipe-separated contact line, bold underlined section headings.
+#             Best for UT Austin CNS students (Computer Science, math, the sciences) — or any
+#             STEM undergrad — who want the exact layout their CNS advisors hand out.
+#   business — "UT Austin Business Resume": the University of Texas at Austin business format
+#             (McCombs-style). Times New Roman 11pt, 24pt centered name in Title Case, pipe
+#             contact line, and bold rule-underlined section headings (Education, Experience,
+#             Campus Involvement, Skills). Best for business majors / McCombs students — or any
+#             finance, consulting, or management applicant who wants a classic serif resume.
+#   modern  — "Modern Accent": single-column, sans-serif, with teal section headings, purple
+#             org/project names, and a teal→purple rule under a left-aligned name. Supports an
+#             optional Professional Summary and a Core Competencies pill grid. Best for tech /
+#             new-grad applicants who want a contemporary look that's still ATS-safe.
+#   professional — experience-first format for graduates with work history. Clean neutral sans;
+#             leads with Experience, then Projects / Skills, with Education condensed to a single
+#             line at the bottom (no GPA/coursework). Best once your work matters more than your
+#             degree — the standard post-grad / experienced-hire layout. (Summary optional.)
+#   jake-pro — the classic "Jake's Resume" look (Calibri, centered name) with the experience-first
+#             post-grad ordering: Experience / Projects / Skills first, Education condensed to one
+#             line at the bottom. Best for Jake fans who've graduated and have work history.
+template: jake-pro
 
 # Bold key terms (tech, metrics) in bullets. Write them as **like this** in resume.yaml;
 # true renders them bold, false strips the markers to plain text.

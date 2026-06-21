@@ -36,6 +36,12 @@
   --bullet-mb: 1.5pt;
   --bullet-align: left;
   --skills-lh: 1.35;
+  /* Accent + rule colors. Default to black so every existing template is byte-identical;
+     a template (e.g. modern) overrides these to colorize headings (--accent), org/school/
+     project names (--accent2), and the thin rules under headings (--rule-color). */
+  --accent: #000;
+  --accent2: #000;
+  --rule-color: #000;
 
   width: 8.5in;
   min-height: 11in;
@@ -73,6 +79,17 @@
   color: #555;
 }
 
+/* URL-like contact fields (email, linkedin, …). Plain by default; the business template
+   shows them underlined because its .docx renders them as hyperlinks. Kept in the active
+   text color (not link-blue) so it reads as a clean resume. */
+.link {
+  color: inherit;
+}
+
+[data-template="business"] .link {
+  text-decoration: underline;
+}
+
 /* Continuation-page running header (page 2+): name left, "Page X of Y" right, rule under.
    Styled entirely from the template's own --vars (border weight, meta font size, section
    gap), so it adapts automatically to every template — no hardcoded font or sizing. */
@@ -80,7 +97,7 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  border-bottom: var(--sect-border) solid #000;
+  border-bottom: var(--sect-border) solid var(--rule-color);
   padding-bottom: 2pt;
   margin-bottom: var(--sect-mb);
   font-size: var(--meta-fs);
@@ -103,7 +120,8 @@
   font-weight: 700;
   letter-spacing: var(--sect-ls);
   text-transform: uppercase;
-  border-bottom: var(--sect-border) solid #000;
+  color: var(--accent);
+  border-bottom: var(--sect-border) solid var(--rule-color);
   padding-bottom: 1pt;
   margin: 0 0 var(--sect-mb) 0;
   /* In print, don't strand a section heading at the bottom of a page — keep it
@@ -134,6 +152,58 @@
 .tech {
   font-weight: 400;
   font-style: italic;
+}
+
+/* Org / school / project name. Colored via --accent2 (black by default, so only templates
+   that set it — e.g. modern — tint these); pair with .bold where the name is bold. */
+.accentName {
+  color: var(--accent2);
+}
+
+/* Muted inline text (dates, location, tech) for templates that gray them out (modern). */
+.muted {
+  color: #555;
+}
+
+/* Professional Summary paragraph. */
+.summary {
+  font-size: var(--bullet-fs);
+  line-height: var(--bullet-lh);
+  margin: 0;
+}
+
+/* Core Competencies pill grid: 4 across, wrapping to as many rows as needed. */
+.competencies {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5pt;
+  break-inside: avoid;
+}
+
+.pill {
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 3pt 5pt;
+  text-align: center;
+  font-size: var(--meta-fs);
+  color: var(--accent);
+}
+
+/* Project description (modern renders bullets as flowing prose) + its tech line. */
+.projectDesc {
+  font-size: var(--bullet-fs);
+  line-height: var(--bullet-lh);
+  margin: 2pt 0 0 0;
+}
+
+.techLine {
+  font-size: var(--meta-fs);
+  font-style: italic;
+  color: #555;
+  margin: 1pt 0 0 0;
 }
 
 .detail {
@@ -168,6 +238,13 @@
   line-height: var(--skills-lh);
 }
 
+/* Business template lists its skills as bullets (the .docx uses a bulleted list), unlike
+   jake/compact/cns which show plain labeled rows. DOM is identical; only the markers differ. */
+[data-template="business"] .skills {
+  list-style: disc;
+  padding-left: var(--bullet-indent);
+}
+
 /* ── Compact template ─────────────────────────────────────────────────────────
    Denser variant in Georgia: smaller type, tighter vertical rhythm, thin section
    rules, justified bullet text. Switched on by data-template="compact" (from
@@ -196,4 +273,155 @@
   --bullet-mb: 1.5pt;
   --bullet-align: justify;
   --skills-lh: 1.24;
+}
+
+/* ── CNS template (UT Austin, College of Natural Sciences) ─────────────────────
+   Faithful to the official "BEVO LONGHORN" .docx: Calibri 12pt black body, a small
+   CENTERED name (not the big masthead), pipe-separated contact line, and section
+   headings that are bold + a thin full-width underline (the docx underlines the
+   heading text and pads it with tabs across the page — here that's the block-level
+   border-bottom). No uppercase letter-spacing and no heavy rule like Jake's.
+   Page margins/padding stay 0.5in so pagination + geometry math keep holding. */
+[data-template="cns"] .page {
+  --ff: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+  --fs: 12pt;
+  --lh: 1.15;
+  --pad-top: 0.5in;
+  --meta-fs: 12pt;       /* contact line is body-size in the source */
+  --name-fs: 15pt;       /* small centered name, not a 28pt masthead */
+  --name-lh: 1.1;
+  --name-ls: 0;
+  --section-mt: 8pt;
+  --sect-fs: 12pt;       /* headings are body-size, just bold + underlined */
+  --sect-ls: 0;
+  --sect-border: 1px;    /* thin single underline, tight to the text */
+  --sect-mb: 3pt;
+  --entry-mb: 6pt;
+  --bullet-indent: 14pt;
+  --bullet-fs: 12pt;
+  --bullet-lh: 1.2;
+  --bullet-mb: 2pt;
+  --bullet-align: left;
+  --skills-lh: 1.3;
+}
+
+/* ── Business template (UT Austin business / McCombs-style resume) ──────────────
+   Faithful to the official "Bailey Business" .docx: Times New Roman throughout
+   (the Normal style sets it; name + contact restate it), 11pt body, a 24pt centered
+   name in Title Case (not all-caps), pipe-separated contact line, and section
+   headings that are bold + a thin full-width rule (docx uses a 0.5pt bottom border).
+   Page margins/padding stay 0.5in so pagination + geometry math keep holding. */
+[data-template="business"] .page {
+  --ff: 'Times New Roman', Times, serif;
+  --fs: 11pt;
+  --lh: 1.15;
+  --pad-top: 0.5in;
+  --meta-fs: 11pt;
+  --name-fs: 24pt;
+  --name-lh: 1.1;
+  --name-ls: 0;
+  --section-mt: 9pt;
+  --sect-fs: 11pt;       /* headings are body-size, just bold + uppercased + ruled */
+  --sect-ls: 0;
+  --sect-border: 1px;    /* thin full-width rule under each heading */
+  --sect-mb: 3pt;
+  --entry-mb: 6pt;
+  --bullet-indent: 18pt;
+  --bullet-fs: 11pt;
+  --bullet-lh: 1.2;
+  --bullet-mb: 2pt;
+  --bullet-align: left;
+  --skills-lh: 1.3;
+}
+
+/* ── Modern Accent template ────────────────────────────────────────────────────
+   Single-column, sans-serif, with a two-tone accent: teal section headings + a teal
+   competency-pill grid (--accent), purple org/school/project names (--accent2), and a
+   teal→purple gradient rule under a LEFT-aligned name. Adds a Professional Summary
+   paragraph and a Core Competencies grid. Still single-column / ATS-safe — page size +
+   padding unchanged so pagination + geometry math keep holding. */
+[data-template="modern"] .page {
+  --ff: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+  --fs: 10.5pt;
+  --lh: 1.3;
+  --pad-top: 0.5in;
+  --meta-fs: 9pt;
+  --name-fs: 26pt;
+  --name-lh: 1.1;
+  --name-ls: 0;
+  --section-mt: 9pt;
+  --sect-fs: 11pt;
+  --sect-ls: 0.08em;
+  --sect-border: 1px;
+  --sect-mb: 4pt;
+  --entry-mb: 7pt;
+  --bullet-indent: 14pt;
+  --bullet-fs: 10.5pt;
+  --bullet-lh: 1.3;
+  --bullet-mb: 2pt;
+  --bullet-align: left;
+  --skills-lh: 1.35;
+  --accent: #0e7490;       /* teal — headings + pills */
+  --accent2: #6d28d9;      /* purple — org/school/project names */
+  --rule-color: #d4d4d4;   /* light gray rule under headings */
+}
+
+/* Left-aligned masthead with a teal→purple gradient rule under the name (drawn as a
+   bottom-anchored background stripe so it's robust inside the print/zoom transforms). */
+[data-template="modern"] .header {
+  text-align: left;
+}
+[data-template="modern"] .name {
+  padding-bottom: 5pt;
+  background-image: linear-gradient(90deg, var(--accent), var(--accent2));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 3px;
+}
+[data-template="modern"] .contact {
+  color: #555;
+  margin-top: 5pt;
+}
+/* Education detail lines read as muted supporting text in this template. */
+[data-template="modern"] .detail {
+  color: #555;
+}
+
+/* ── Professional template (post-grad / experienced) ───────────────────────────
+   Clean neutral sans, no accent color. The distinctive part is structural (handled in
+   ResumeContent): Experience leads and Education is condensed to one line at the bottom.
+   Left-aligned name with a solid rule; conservative, recruiter-friendly, ATS-safe. */
+[data-template="professional"] .page {
+  --ff: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+  --fs: 10.5pt;
+  --lh: 1.25;
+  --pad-top: 0.5in;
+  --meta-fs: 9.5pt;
+  --name-fs: 22pt;
+  --name-lh: 1.1;
+  --name-ls: 0.02em;
+  --section-mt: 9pt;
+  --sect-fs: 10.5pt;
+  --sect-ls: 0.1em;
+  --sect-border: 1px;
+  --sect-mb: 4pt;
+  --entry-mb: 7pt;
+  --bullet-indent: 14pt;
+  --bullet-fs: 10.5pt;
+  --bullet-lh: 1.3;
+  --bullet-mb: 2pt;
+  --bullet-align: left;
+  --skills-lh: 1.35;
+}
+[data-template="professional"] .header {
+  text-align: left;
+}
+[data-template="professional"] .name {
+  border-bottom: 2px solid #000;
+  padding-bottom: 4pt;
+  margin-bottom: 2pt;
+}
+[data-template="professional"] .contact {
+  color: #333;
+  margin-top: 5pt;
 }

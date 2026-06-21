@@ -1,27 +1,75 @@
-import type { Resume, EducationEntry, ExperienceEntry, ProjectEntry, SkillGroup } from '../types'
+import type { Resume, EducationEntry, ExperienceEntry, ProjectEntry, SkillGroup, TemplateName } from '../types'
 import s from './resume.module.css'
 
-export default function ResumeContent({ data, bulletData, boldKeywords = true }: { data: Resume; bulletData?: boolean; boldKeywords?: boolean }) {
+// Entry layout family. Templates pick one; the styling (font/color) is layered on via CSS.
+//   jake   — classic two columns: [company | location] then [title | dates]
+//   ut     — UT Austin .docx format: [company, location | dates] then [title]
+//   modern — [company | dates] then [title | location]; projects render as prose + a tech line
+type Layout = 'jake' | 'ut' | 'modern'
+
+function layoutFor(template: TemplateName): Layout {
+  if (template === 'modern') return 'modern'
+  if (template === 'cns' || template === 'business') return 'ut'
+  return 'jake'
+}
+
+export default function ResumeContent({ data, bulletData, boldKeywords = true, template = 'jake' }: { data: Resume; bulletData?: boolean; boldKeywords?: boolean; template?: TemplateName }) {
+  const layout = layoutFor(template)
+  // The professional templates lead with Experience and demote Education to a single condensed
+  // line at the bottom (the standard post-grad / experienced format). `jake-pro` is the same
+  // ordering wearing the classic Jake styling. Every other template keeps Education first.
+  const pro = template === 'professional' || template === 'jake-pro'
+  const eduLayout: Layout | 'condensed' = pro ? 'condensed' : layout
+
+  const summaryNode = data.summary ? (
+    <Section key="summary" title="Professional Summary">
+      <p className={s.summary}>{data.summary}</p>
+    </Section>
+  ) : null
+  const competenciesNode = data.competencies && data.competencies.length > 0 ? (
+    <Section key="competencies" title={data.competenciesTitle ?? 'Core Competencies'}>
+      <ul className={s.competencies}>
+        {data.competencies.map((c, i) => <li key={i} className={s.pill}>{c}</li>)}
+      </ul>
+    </Section>
+  ) : null
+  const educationNode = (
+    <Section key="education" title="Education">
+      {data.education.map((e, i) => <EducationItem key={i} entry={e} layout={eduLayout} />)}
+    </Section>
+  )
+  const experienceNode = (
+    <Section key="experience" title={data.experienceTitle ?? 'Experience'}>
+      {data.experience.map((e, i) => <ExperienceItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} layout={layout} />)}
+    </Section>
+  )
+  const projectsNode = data.projects && data.projects.length > 0 ? (
+    <Section key="projects" title="Projects">
+      {data.projects.map((e, i) => <ProjectItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} layout={layout} />)}
+    </Section>
+  ) : null
+  const leadershipNode = data.leadership && data.leadership.length > 0 ? (
+    <Section key="leadership" title={data.leadershipTitle ?? 'Leadership & Community Involvement'}>
+      {data.leadership.map((e, i) => <ExperienceItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} layout={layout} />)}
+    </Section>
+  ) : null
+  const skillsNode = <SkillsSection key="skills" skills={data.skills} title={data.skillsTitle ?? 'Technical Skills'} />
+  const honorsNode = data.honors && data.honors.length > 0 ? (
+    <Section key="honors" title={data.honorsTitle ?? 'Honors & Activities'}>
+      <ul className={s.skills}>
+        {data.honors.map((h, i) => <li key={i} data-fill-line data-fill-section="honors" data-fill-label={`honors[${i}]`}>{bulletNodes(h, boldKeywords)}</li>)}
+      </ul>
+    </Section>
+  ) : null
+
+  const body = pro
+    ? [summaryNode, competenciesNode, experienceNode, projectsNode, leadershipNode, skillsNode, educationNode, honorsNode]
+    : [summaryNode, competenciesNode, educationNode, experienceNode, projectsNode, leadershipNode, skillsNode, honorsNode]
+
   return (
     <>
       <Header name={data.name} contact={data.contact} />
-      <Section title="Education">
-        {data.education.map((e, i) => <EducationItem key={i} entry={e} />)}
-      </Section>
-      <Section title="Experience">
-        {data.experience.map((e, i) => <ExperienceItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} />)}
-      </Section>
-      <Section title="Projects">
-        {data.projects.map((e, i) => <ProjectItem key={i} entry={e} bulletData={bulletData} bold={boldKeywords} />)}
-      </Section>
-      <SkillsSection skills={data.skills} />
-      {data.honors && data.honors.length > 0 && (
-        <Section title={data.honorsTitle ?? 'Honors & Activities'}>
-          <ul className={s.skills}>
-            {data.honors.map((h, i) => <li key={i} data-fill-line data-fill-section="honors" data-fill-label={`honors[${i}]`}>{bulletNodes(h, boldKeywords)}</li>)}
-          </ul>
-        </Section>
-      )}
+      {body}
     </>
   )
 }
@@ -49,23 +97,27 @@ export function RunningHeader({ name, page, total }: { name: string; page: numbe
 }
 
 function Header({ name, contact }: { name: string; contact: Resume['contact'] }) {
+  // Render only the fields that are present, joined by " | ". URL-like fields get the .link
+  // class (underlined in templates whose source shows them as hyperlinks, e.g. business);
+  // phone and location are plain text. Order matches the prior layout, with location last.
+  const parts: { text: string; link: boolean }[] = [
+    { text: contact.phone, link: false },
+    { text: contact.email, link: true },
+    { text: contact.linkedin, link: true },
+    contact.github ? { text: contact.github, link: true } : null,
+    contact.website ? { text: contact.website, link: true } : null,
+    contact.location ? { text: contact.location, link: false } : null,
+  ].filter((p): p is { text: string; link: boolean } => p !== null && Boolean(p.text))
   return (
     <header className={s.header}>
       <h1 className={s.name}>{name}</h1>
       <p className={s.contact}>
-        {contact.phone}
-        <span className={s.sep}> | </span>
-        {contact.email}
-        <span className={s.sep}> | </span>
-        {contact.linkedin}
-        <span className={s.sep}> | </span>
-        {contact.github}
-        {contact.website && (
-          <>
-            <span className={s.sep}> | </span>
-            {contact.website}
-          </>
-        )}
+        {parts.map((p, i) => (
+          <span key={i}>
+            {i > 0 && <span className={s.sep}> | </span>}
+            {p.link ? <span className={s.link}>{p.text}</span> : p.text}
+          </span>
+        ))}
       </p>
     </header>
   )
@@ -80,17 +132,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   )
 }
 
-function EducationItem({ entry }: { entry: EducationEntry }) {
+function EducationDetails({ entry }: { entry: EducationEntry }) {
   return (
-    <div className={s.entry}>
-      <div className={s.entryRow}>
-        <span className={s.bold}>{entry.school}</span>
-        <span>{entry.location}</span>
-      </div>
-      <div className={s.entryRow}>
-        <span className={s.italic}>{entry.degree}</span>
-        <span>{entry.start} – {entry.end}</span>
-      </div>
+    <>
       {entry.gpa && <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="gpa">GPA: {entry.gpa}</p>}
       {entry.coursework && entry.coursework.length > 0 && (
         <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="coursework"><span className={s.bold}>Relevant Coursework:</span> {entry.coursework.join(', ')}</p>
@@ -101,34 +145,127 @@ function EducationItem({ entry }: { entry: EducationEntry }) {
       {entry.awards && entry.awards.length > 0 && (
         <p className={s.detail} data-fill-line data-fill-section="education" data-fill-label="awards"><span className={s.bold}>Awards:</span> {entry.awards.join(', ')}</p>
       )}
+    </>
+  )
+}
+
+function EducationItem({ entry, layout }: { entry: EducationEntry; layout: Layout | 'condensed' }) {
+  if (layout === 'condensed') {
+    // One line, no GPA/coursework — the post-grad/professional treatment.
+    return (
+      <div className={s.entry}>
+        <div className={s.entryRow}>
+          <span><span className={s.bold}>{entry.degree}</span>, {entry.school}</span>
+          <span>{entry.end}</span>
+        </div>
+      </div>
+    )
+  }
+  if (layout === 'modern') {
+    return (
+      <div className={s.entry}>
+        <div className={s.entryRow}>
+          <span><span className={s.bold}>{entry.degree}</span>{' – '}<span className={s.accentName}>{entry.school}</span></span>
+          <span className={s.muted}>{entry.start} – {entry.end}</span>
+        </div>
+        <EducationDetails entry={entry} />
+      </div>
+    )
+  }
+  if (layout === 'ut') {
+    return (
+      <div className={s.entry}>
+        <div className={s.entryRow}>
+          <span><span className={`${s.bold} ${s.accentName}`}>{entry.school}</span>, {entry.location}</span>
+          <span>{entry.start} – {entry.end}</span>
+        </div>
+        <div className={s.italic}>{entry.degree}</div>
+        <EducationDetails entry={entry} />
+      </div>
+    )
+  }
+  return (
+    <div className={s.entry}>
+      <div className={s.entryRow}>
+        <span className={`${s.bold} ${s.accentName}`}>{entry.school}</span>
+        <span>{entry.location}</span>
+      </div>
+      <div className={s.entryRow}>
+        <span className={s.italic}>{entry.degree}</span>
+        <span>{entry.start} – {entry.end}</span>
+      </div>
+      <EducationDetails entry={entry} />
     </div>
   )
 }
 
-function ExperienceItem({ entry, bulletData, bold = true }: { entry: ExperienceEntry; bulletData?: boolean; bold?: boolean }) {
+function ExperienceItem({ entry, bulletData, bold = true, layout }: { entry: ExperienceEntry; bulletData?: boolean; bold?: boolean; layout: Layout }) {
+  const bullets = (
+    <ul className={s.bullets} {...(bulletData ? { 'data-bullets': true } : {})}>
+      {entry.bullets.map((b, i) => <li key={i}>{bulletNodes(b, bold)}</li>)}
+    </ul>
+  )
+  if (layout === 'modern') {
+    return (
+      <div className={s.entry}>
+        <div className={s.entryRow}>
+          <span className={`${s.bold} ${s.accentName}`}>{entry.company}</span>
+          <span className={s.muted}>{entry.start} – {entry.end}</span>
+        </div>
+        <div><span className={s.bold}>{entry.title}</span><span className={s.muted}> | {entry.location}</span></div>
+        {bullets}
+      </div>
+    )
+  }
+  if (layout === 'ut') {
+    return (
+      <div className={s.entry}>
+        <div className={s.entryRow}>
+          <span><span className={`${s.bold} ${s.accentName}`}>{entry.company}</span>, {entry.location}</span>
+          <span>{entry.start} – {entry.end}</span>
+        </div>
+        <div className={s.italic}>{entry.title}</div>
+        {bullets}
+      </div>
+    )
+  }
   return (
     <div className={s.entry}>
       <div className={s.entryRow}>
-        <span className={s.bold}>{entry.company}</span>
+        <span className={`${s.bold} ${s.accentName}`}>{entry.company}</span>
         <span>{entry.location}</span>
       </div>
       <div className={s.entryRow}>
         <span className={s.italic}>{entry.title}</span>
         <span>{entry.start} – {entry.end}</span>
       </div>
-      <ul className={s.bullets} {...(bulletData ? { 'data-bullets': true } : {})}>
-        {entry.bullets.map((b, i) => <li key={i}>{bulletNodes(b, bold)}</li>)}
-      </ul>
+      {bullets}
     </div>
   )
 }
 
-function ProjectItem({ entry, bulletData, bold = true }: { entry: ProjectEntry; bulletData?: boolean; bold?: boolean }) {
+function ProjectItem({ entry, bulletData, bold = true, layout }: { entry: ProjectEntry; bulletData?: boolean; bold?: boolean; layout: Layout }) {
+  // Modern shows the project name, the description as flowing prose (no bullet markers), then a
+  // muted technologies line beneath — no dates. Other layouts keep the name | tech header with
+  // dates on the right and a bulleted list below.
+  if (layout === 'modern') {
+    return (
+      <div className={s.entry}>
+        <div className={s.entryRow}>
+          <span className={`${s.bold} ${s.accentName}`}>{entry.name}</span>
+        </div>
+        <p className={s.projectDesc}>
+          {entry.bullets.map((b, i) => <span key={i}>{i > 0 ? ' ' : ''}{bulletNodes(b, bold)}</span>)}
+        </p>
+        {entry.technologies.length > 0 && <p className={s.techLine}>{entry.technologies.join(', ')}</p>}
+      </div>
+    )
+  }
   return (
     <div className={s.entry}>
       <div className={s.entryRow}>
         <span>
-          <span className={s.bold}>{entry.name}</span>
+          <span className={`${s.bold} ${s.accentName}`}>{entry.name}</span>
           {' | '}
           <span className={s.tech}>{entry.technologies.join(', ')}</span>
         </span>
@@ -141,9 +278,9 @@ function ProjectItem({ entry, bulletData, bold = true }: { entry: ProjectEntry; 
   )
 }
 
-function SkillsSection({ skills }: { skills: SkillGroup[] }) {
+function SkillsSection({ skills, title }: { skills: SkillGroup[]; title: string }) {
   return (
-    <Section title="Technical Skills">
+    <Section title={title}>
       <ul className={s.skills}>
         {skills.map(({ label, items }) => (
           <li key={label} data-fill-line data-fill-section="skills" data-fill-label={label}>

@@ -2,7 +2,7 @@
 import { useState, useLayoutEffect, useRef } from 'react'
 import ResumeContent, { RunningHeader } from './ResumeContent'
 import GeometryCapture from './GeometryCapture'
-import type { Resume } from '../types'
+import type { Resume, TemplateName } from '../types'
 import s from './resume.module.css'
 
 const PAGE_H = 1056   // 11in at 96dpi
@@ -21,7 +21,7 @@ const BOT_PAD = 48    // 0.5in
 //   page 2+  — top 48 + bottom 48 + running header → 1056 - 48 - 48 - hdr  < 960
 const PAGE1_BUDGET = PAGE_H - TOP_PAD - BOT_PAD
 
-export default function PageLayout({ data, boldKeywords = true }: { data: Resume; boldKeywords?: boolean }) {
+export default function PageLayout({ data, boldKeywords = true, template = 'jake' }: { data: Resume; boldKeywords?: boolean; template?: TemplateName }) {
   // breaks[i]..breaks[i+1] is the content slice shown on page i (content-relative px).
   const [breaks, setBreaks] = useState<number[]>([0, PAGE1_BUDGET])
   const probeRef = useRef<HTMLDivElement>(null)
@@ -101,7 +101,7 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
         style={{ position: 'absolute', left: '-9999px', top: 0, visibility: 'hidden', pointerEvents: 'none', minHeight: 0 }}
         aria-hidden="true"
       >
-        <ResumeContent data={data} boldKeywords={boldKeywords} />
+        <ResumeContent data={data} boldKeywords={boldKeywords} template={template} />
       </div>
 
       {/* Hidden probe: measures the running header's height for the continuation-page budget,
@@ -138,7 +138,7 @@ export default function PageLayout({ data, boldKeywords = true }: { data: Resume
                   {/* PDF page-2+ headers are stamped onto the rendered PDF by /api/pdf
                       (pdf-lib); the on-screen page-2+ headers come from the cards above. So no
                       break plan is injected into the content flow. */}
-                  <ResumeContent data={data} bulletData boldKeywords={boldKeywords} />
+                  <ResumeContent data={data} bulletData boldKeywords={boldKeywords} template={template} />
                 </div>
               </div>
             </div>

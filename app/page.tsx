@@ -30,7 +30,7 @@ export default function Page() {
   return (
     <main className={s.shell} data-shell data-template={profile.template}>
       <div data-zoom-wrap style={{ transform: 'scale(0.75)', transformOrigin: 'top center' }}>
-        <ResumeView data={data} boldKeywords={profile.boldKeywords} />
+        <ResumeView data={data} boldKeywords={profile.boldKeywords} template={profile.template} />
       </div>
       {process.env.NODE_ENV === 'development' && <BadgeToggle />}
       <ExportButton name={data.name} />

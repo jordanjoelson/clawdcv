@@ -1,89 +1,56 @@
-name: Jordan Joelson
+# Professional template preview — generic filler content (NOT real). Experience-first; the
+# template demotes Education to one condensed line at the bottom. Your real resume is in
+# resume.mine.yaml (and in git: `git restore resume.yaml`).
+name: Riley Morgan
 contact:
-  phone: "682-261-6731"
-  email: jordan@jordanjoelson.com
-  linkedin: linkedin.com/in/jordanjoelson
-  github: github.com/jordanjoelson
-  website: jordanjoelson.com
+  phone: "(555) 123-4567"
+  email: riley.morgan@email.com
+  linkedin: linkedin.com/in/rileymorgan
+  website: rileymorgan.dev
+  location: "Austin, TX"
 
 education:
-  - school: University of Texas at Dallas
-    degree: "Bachelor of Science in Computer Science, GPA: 3.5"
-    location: Richardson, TX
-    start: Aug 2023
-    end: May 2027
-    awards:
-      - 4 wins across 12 hackathons — LAHacks (UCLA), NexHacks (CMU)
+  - school: State University
+    degree: B.S. Computer Science
+    location: Austin, TX
+    start: Aug 2017
+    end: May 2021
 
 experience:
-  - company: Winstead PC
-    title: IT Intern
-    location: Dallas, TX (Hybrid)
-    start: May 2026
+  - company: Example Tech Co.
+    title: Software Engineer
+    location: Austin, TX
+    start: Jun 2023
     end: Present
     bullets:
-      - Design AI-driven automation for document-management workflows, cutting manual overhead for the firm's legal staff
-      - Administer NetDocuments DMS and VDI infrastructure, diagnosing and resolving technical issues firm-wide for staff
-      - Restructure client-matter number taxonomy and folder architecture to streamline document retrieval and compliance
+      - Led migration of a monolith to **microservices**, cutting p95 latency 35% and enabling independent team deploys
+      - Designed and shipped a **billing API** handling 1M+ requests/day with 99.9% uptime across three regions
+      - Mentored 3 junior engineers and introduced a code-review rubric that reduced production incidents 25%
 
-  - company: Cornell Breakthrough Tech
-    title: Machine Learning Fellow
+  - company: Startup Inc.
+    title: Software Engineer
     location: Remote
-    start: Apr 2026
-    end: Present
+    start: Jul 2021
+    end: May 2023
     bullets:
-      - Build and fine-tune classification and regression models in Python with scikit-learn, pandas, NumPy via CRISP-DM
-      - Apply KNN, decision trees, and dimensionality reduction in hands-on Jupyter Notebook labs on real-world problems
-
-  - company: NASA L'SPACE Proposal Program
-    title: Researcher
-    location: Remote
-    start: Jan 2026
-    end: May 2026
-    bullets:
-      - Built prototypes and simulations in Siemens NX, JMARS, MATLAB, and Python to validate mission design feasibility
-
-  - company: Experimental Space Plasma Group (UTD · UCLA)
-    title: Research Assistant
-    location: Richardson, TX
-    start: Apr 2025
-    end: Sep 2025
-    bullets:
-      - Applied clustering algorithms (K-Means, DBSCAN, HDBSCAN, BIRCH) in Python with Scikit-learn for pattern analysis
-      - Visualized satellite data using dimensionality reduction techniques (PCA, t-SNE, Self-Organizing Maps) for insights
+      - Built core **React** and **Node.js** features for a SaaS product that grew to 50,000 monthly active users
+      - Added an automated **CI/CD pipeline** and test suite, raising coverage to 85% and halving release time
+      - Owned the analytics service, instrumenting events that informed the team's quarterly roadmap
 
 projects:
-  - name: HARP & Jury Platforms
-    technologies: [Open-source hackathon applications and judging infrastructure]
-    start: Jan 2026
-    end: Present
+  - name: OpenMetrics Dashboard
+    technologies: [TypeScript, React, Go, PostgreSQL]
+    start: Jan 2023
+    end: Jun 2023
     bullets:
-      - Engineered distributed, fault-tolerant infrastructure on **AWS** supporting 2,000+ participants with high availability
-      - Built HARP application portal in **TypeScript, React, and Node.js** handling applicant onboarding and registration flows
-      - Developed Jury platform with **Firebase** and **Tailwind** for live project scoring and real-time leaderboard management
-
-  - name: Skin Lesion Classifier
-    technologies: [Deep learning classifier for dermatological clinical research]
-    start: Jan 2026
-    end: Apr 2026
-    bullets:
-      - Led 3-person GDSC team building 7-class CV classifier in **Python** and **TensorFlow** on 40K labeled dermoscopic images
-      - Implemented **OpenCV** preprocessing and fine-tuned **EfficientNet-B0**, achieving 90%+ accuracy across all 7 classes
-      - Deployed real-time **Gradio** inference interface on **HuggingFace** with confidence scoring for clinical research use cases
-
-  - name: Realvo
-    technologies: [Time-series forecasting research on REIT market returns]
-    start: Jan 2025
-    end: Jun 2025
-    bullets:
-      - Forecasted REIT market returns in **Python**/**PyTorch** with Temporal Fusion Transformers, beating LSTM by 10–15%
-      - Built automated **JavaScript** pipelines scraping SPG and INVH market datasets via **Cloudflare Workers** for backtesting
-      - Tracked experiments in **Weights & Biases**, iterating on architecture and hyperparameters to optimize forecast results
+      - Built an open-source observability dashboard adopted by 500+ developers, with real-time charts and alerting
+      - Designed a plugin API that let the community add 20+ integrations without touching the core
 
 skills:
   - label: Languages
-    items: [Java, Python, TypeScript, SQL, C++, Go]
+    items: [Python, TypeScript, Go, SQL, Java]
   - label: Frameworks & Tools
-    items: [Spring Boot, React, Node.js, Next.js, FastAPI, AWS, Docker, Kubernetes, PostgreSQL, Redis, Git]
-  - label: AI Tools
-    items: [Claude, ChatGPT, GitHub Copilot, Cursor, Hugging Face, Weights & Biases]
+    items: [React, Node.js, Next.js, FastAPI, Docker, Kubernetes, PostgreSQL, AWS, Git]
+  - label: Practices
+    items: [CI/CD, Testing, System Design, Code Review, Agile]
+skillsTitle: Skills
