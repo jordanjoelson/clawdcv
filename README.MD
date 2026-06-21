@@ -4,6 +4,13 @@
 
 # clawdcv
 
+<p align="center">
+  <a href="#setup">Setup</a> ·
+  <a href="#how-to-use-it">Usage</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a> ·
+  <a href="philosophy.md">Philosophy</a>
+</p>
+
 **A resume editor you talk to.** You tell it what you did, and it writes the bullet point, measures the page, and keeps everything on one clean page. The name just comes from "Claude" plus "CV."
 
 It runs on your own computer, and your resume never leaves it.
