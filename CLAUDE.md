@@ -5,13 +5,19 @@
 
 This is a local-first resume tool. The user talks to you to edit their resume. You edit `resume.yaml`, the browser renders it live as Jake's Resume template, and `geometry.json` tells you the layout state after each render.
 
+## Talking to the user
+
+Be concise. Lead with the answer in a sentence or two; expand only when genuinely explaining something. No five-paragraph walls of text — they overwhelm people and deter use. Prefer a short list or one tight paragraph over many. Say the concrete action, not jargon (e.g. "make the `localhost:3000` window visible," never "refocus").
+
 ## Workflow
 
 1. Read `geometry.json` before making any edits — it contains the current layout state measured by Pretext in the browser
 2. Read `resume.yaml` to understand current content
 3. Make edits to `resume.yaml`
 4. The browser hot-reloads on save and regenerates `geometry.json` — **rely on the user's open browser for this. Do NOT spin up a headless browser to force a render as a matter of course** — it's slow and usually redundant.
-5. Confirm the refresh landed: the bullet `text` values in `geometry.json` should match what you just wrote. If they still show the OLD text, the page isn't rendering (no open/focused tab) — that's the *only* time to fall back to a one-off headless render, or just ask the user to open/refocus `localhost:3000`. Detect staleness; don't pre-empt it.
+5. Confirm the refresh landed: the bullet `text` values in `geometry.json` should match what you just wrote. If they still show the OLD text, the page isn't re-rendering — that's the *only* time to fall back to a one-off headless render, or just ask the user to bring the page back on screen. Detect staleness; don't pre-empt it.
+
+   **Visible, not focused.** The page reloads as long as the `localhost:3000` window is *visible* on screen. It does NOT need to be the focused/clicked window. Two monitors is the normal case: the browser sits on one monitor while the user clicks into the terminal on the other — the browser is unfocused but still visible, so it keeps reloading fine. The only thing that breaks it is the window being **minimized or fully hidden behind another window** (browsers freeze hidden tabs). So never tell the user to "refocus" or "click into" the browser. Say the concrete action: **"make sure the `localhost:3000` window is visible on screen (not minimized or covered)."**
 
 ## Shaping the template to the user's content
 
@@ -66,6 +72,8 @@ Optional building blocks already wired up (offer these when the user's content c
 **Multi-page continuation headers.** Page 2+ get a slim running header (name left, "Page X of Y" right, rule under) — `RunningHeader` in `ResumeContent.tsx`, styled from the template `--vars` so it adapts to any template. Page 1 keeps its full masthead only. Mechanics: `PageLayout` tags each section/entry with `data-block-key`, computes the page breaks, and maps each continuation page's start back to its block key; the print flow (card 0) then injects a `.printPageStart` (running header + `break-before: page`) before those blocks, so the PDF breaks at the exact same boundaries as the on-screen cards (screen == PDF). Continuation pages reserve the header's measured height in their budget (`contBudget`). It's fully gated on `numPages > 1`, so single-page resumes are byte-identical to before — do not let a refactor make a one-page resume render a header.
 
 **`profile.pages` — single vs multi.** `profile.yaml` carries a length preference (`single`, the default, or `multi`). It doesn't change rendering — it's *your* intent signal: in `single` mode, treat a `page overflows` warning as something to **fix** (trim/tighten until it's one page); in `multi` mode, overflow is fine and the continuation header handles page 2+. The conversational intake should **ask** this when building a profile, defaulting to single.
+
+**Intake: target a specific job or general?** When building a profile, also **ask up front whether the resume is for a specific job or a general one.** If specific, take the posting (paste or link) and tailor to it — extract the real keywords and weave them in where true, per *Tailoring to a job posting* in `philosophy.md`. If general, write for the broad target role. Asking before writing means bullets get tailored on the first pass instead of reworked later. (This is intent, not a rendered field; you don't need to store it in `profile.yaml`.)
 
 ## Sizing a bullet to ≥95% in one pass
 

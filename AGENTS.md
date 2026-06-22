@@ -10,6 +10,12 @@ how to shape sections to the user's content. **If you are not Claude Code, read 
 `philosophy.md` now, before editing anything** — that's where the real workflow lives. (Claude
 Code already pulls both in for you.)
 
+**The one gotcha worth knowing up front:** after you edit `resume.yaml`, the browser only
+re-renders and refreshes `geometry.json` while the `localhost:3000` window is **visible** on
+screen (it does NOT need focus — an unfocused window on a second monitor is fine; only a
+minimized or fully-covered window stops it). If `geometry.json` still shows old text, tell the
+user to make that window visible, don't assume your edit failed. Full detail is in `CLAUDE.md`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
