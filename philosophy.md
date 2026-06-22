@@ -86,6 +86,26 @@ Screeners — human and software — skim top-down, so make the signal easy to e
 - **Consistent verb tense:** every bullet opens with a strong action verb; **past tense for past roles, present for the current role**, never mixed within an entry (see Voice and mechanics).
 - **Front-load the keyword** (skill, tool, or outcome) that matters most so it survives a 6-second skim and top-down ATS parsing.
 
+### Bolding for emphasis
+
+Bold (`**like this**` in `resume.yaml`) is for the **human** skimmer — ATS parses plain text and
+ignores weight, so bold's only job is to make the eye land on what matters. That means use it
+*sparingly*: if everything is bold, nothing is. The rule, applied **uniformly across Experience
+and Projects**:
+
+- **Bold the metric/result** in every bullet that has one — numbers are the biggest credibility
+  lever, so the quantified outcome (`90%+ accuracy`, `2,000+ users`, `40K images`, `10–15%`) is
+  exactly what should pop.
+- **Bold one distinctive tool/tech** per bullet — the differentiating one (`TensorFlow`,
+  `EfficientNet-B0`, `Cloudflare Workers`), not the generic one.
+- **Don't bold ubiquitous or repeated terms.** A common language that appears in half the bullets
+  (e.g. Python) differentiates nothing and just makes a polka-dot page; it's already in Skills.
+  Bold a given term in one standout spot, not everywhere.
+- **Cap it at ~1–2 bold marks per bullet.** More than that is noise, not emphasis.
+
+Bold runs render **wider** than plain text (see `CLAUDE.md`), so adding or removing `**markers**`
+can push a near-full bullet over a line — re-check the geometry after a bolding pass.
+
 ## Relevance and prioritization
 
 - Most relevant, most impressive bullets first within each entry — recruiters skim the top.
