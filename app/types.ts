@@ -36,6 +36,9 @@ export interface ExperienceEntry {
 
 export interface ProjectEntry {
   name: string
+  // Optional repo / live-demo URL. When set, the project name renders as a hyperlink
+  // (clickable on screen and in the exported PDF).
+  url?: string
   technologies: string[]
   start: string
   end: string

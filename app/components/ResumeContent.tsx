@@ -250,6 +250,15 @@ function ExperienceItem({ entry, bulletData, bold = true, layout }: { entry: Exp
   )
 }
 
+// Project name, hyperlinked to its repo / live demo when `url` is set (clickable on screen and
+// in the exported PDF), otherwise plain text. Same bold/accent styling either way.
+function projectName(entry: ProjectEntry): React.ReactNode {
+  const cls = `${s.bold} ${s.accentName}`
+  return entry.url
+    ? <a className={cls} href={entry.url} target="_blank" rel="noopener noreferrer">{entry.name}</a>
+    : <span className={cls}>{entry.name}</span>
+}
+
 function ProjectItem({ entry, bulletData, bold = true, layout }: { entry: ProjectEntry; bulletData?: boolean; bold?: boolean; layout: Layout }) {
   // Modern shows the project name, the description as flowing prose (no bullet markers), then a
   // muted technologies line beneath — no dates. Other layouts keep the name | tech header with
@@ -258,7 +267,7 @@ function ProjectItem({ entry, bulletData, bold = true, layout }: { entry: Projec
     return (
       <div className={s.entry}>
         <div className={s.entryRow}>
-          <span className={`${s.bold} ${s.accentName}`}>{entry.name}</span>
+          {projectName(entry)}
         </div>
         <p className={s.projectDesc}>
           {entry.bullets.map((b, i) => <span key={i}>{i > 0 ? ' ' : ''}{bulletNodes(b, bold)}</span>)}
@@ -271,7 +280,7 @@ function ProjectItem({ entry, bulletData, bold = true, layout }: { entry: Projec
     <div className={s.entry}>
       <div className={s.entryRow}>
         <span>
-          <span className={`${s.bold} ${s.accentName}`}>{entry.name}</span>
+          {projectName(entry)}
           {' | '}
           <span className={s.tech}>{entry.technologies.join(', ')}</span>
         </span>
