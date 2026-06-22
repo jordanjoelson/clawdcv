@@ -73,13 +73,17 @@ Open **http://localhost:3000**. You'll see your resume. Keep that tab open and v
 
 You can use it in two ways.
 
-**Talk to it.** Open the project in **Claude Code** (the default and best-supported) and just say what you want:
+**Talk to it.** The simplest way — no terminal required — is the **Claude Code desktop app** (Mac/Windows; see the [Claude Code docs](https://docs.claude.com/en/docs/claude-code) to download). Open this project folder in it and just chat — it can even run the `npm install` and start the live preview for you if you ask. Then say what you want:
 
 > "Here's my LinkedIn dump, build my resume."
 > "Add a Certifications section."
 > "Make the projects clearer and keep it on one page."
 
-Other coding agents work too: Codex, Cursor, Gemini CLI, or anything that reads `AGENTS.md`. They pick up the same workflow from `AGENTS.md`, which points them at the operating manual in `CLAUDE.md` and `philosophy.md`.
+**Prefer the terminal?** *(Skip this if you're using the desktop app.)* Install the CLI with `npm install -g @anthropic-ai/claude-code`, then run `claude` from the project folder.
+
+Either way, Claude Code asks before it edits a file or runs a command — just approve each one. Once you're comfortable and want fewer prompts, you can start the CLI with `claude --dangerously-skip-permissions`, which lets it work without stopping to ask; only use that when you trust what it's doing.
+
+Other coding agents work too: install [Codex](https://github.com/openai/codex) (`npm install -g @openai/codex`, then run `codex`), or use Cursor, Gemini CLI, or anything that reads `AGENTS.md`. They pick up the same workflow from `AGENTS.md`, which points them at the operating manual in `CLAUDE.md` and `philosophy.md`.
 
 The agent edits `resume.yaml`, watches the measurements in `geometry.json`, and adjusts each bullet until it fills at least 95% of its line and the whole resume fits on one page.
 
