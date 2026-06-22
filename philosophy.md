@@ -85,6 +85,7 @@ Screeners — human and software — skim top-down, so make the signal easy to e
 - **Consistent punctuation:** pick one rule and apply it to *every* bullet. Default here: **no terminal periods** (bullets are fragments). Whatever the choice, it must be uniform across the whole resume.
 - **Consistent verb tense:** every bullet opens with a strong action verb; **past tense for past roles, present for the current role**, never mixed within an entry (see Voice and mechanics).
 - **Front-load the keyword** (skill, tool, or outcome) that matters most so it survives a 6-second skim and top-down ATS parsing.
+- **Location line = city, state.** Omit the work arrangement (`Hybrid`/`On-site`) — it adds no signal and clutters the line. Include `Remote` *only* when it explains the geography (e.g., a local student working for an org in another city/region); for a local role it's just noise.
 
 ### Bolding for emphasis
 
