@@ -96,6 +96,16 @@ export function RunningHeader({ name, page, total }: { name: string; page: numbe
   )
 }
 
+// Turn a contact value or project URL into a working absolute href: emails get `mailto:`, and
+// scheme-less domains get `https://`. Without this a bare `linkedin.com/in/you` renders as a
+// relative link that resolves against the host (localhost) and breaks — on screen and in the PDF.
+function toHref(value: string): string {
+  const v = value.trim()
+  if (/^(https?:|mailto:|tel:)/i.test(v)) return v
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return `mailto:${v}`
+  return `https://${v}`
+}
+
 function Header({ name, contact }: { name: string; contact: Resume['contact'] }) {
   // Render only the fields that are present, joined by " | ". URL-like fields get the .link
   // class (underlined in templates whose source shows them as hyperlinks, e.g. business);
@@ -115,7 +125,7 @@ function Header({ name, contact }: { name: string; contact: Resume['contact'] })
         {parts.map((p, i) => (
           <span key={i}>
             {i > 0 && <span className={s.sep}> | </span>}
-            {p.link ? <span className={s.link}>{p.text}</span> : p.text}
+            {p.link ? <a className={s.link} href={toHref(p.text)} target="_blank" rel="noopener noreferrer">{p.text}</a> : p.text}
           </span>
         ))}
       </p>
@@ -255,7 +265,7 @@ function ExperienceItem({ entry, bulletData, bold = true, layout }: { entry: Exp
 function projectName(entry: ProjectEntry): React.ReactNode {
   const cls = `${s.bold} ${s.accentName}`
   return entry.url
-    ? <a className={cls} href={entry.url} target="_blank" rel="noopener noreferrer">{entry.name}</a>
+    ? <a className={cls} href={toHref(entry.url)} target="_blank" rel="noopener noreferrer">{entry.name}</a>
     : <span className={cls}>{entry.name}</span>
 }
 

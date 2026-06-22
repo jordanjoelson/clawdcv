@@ -84,6 +84,7 @@
    text color (not link-blue) so it reads as a clean resume. */
 .link {
   color: inherit;
+  text-decoration: none;
 }
 
 [data-template="business"] .link {
