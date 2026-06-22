@@ -31,7 +31,10 @@
 template: jake-pro
 
 # Bold key terms (tech, metrics) in bullets. Write them as **like this** in resume.yaml;
-# true renders them bold, false strips the markers to plain text.
+# true renders them bold, false strips the markers to plain text. This applies to EVERY
+# bullet section — Experience, Projects, Leadership, and Honors — not just Projects. Bold
+# only shows up where you actually write **markers**, so to bold Experience you must add
+# the markers there too; the setting alone won't bold a section that has no markers.
 boldKeywords: true
 
 # Length — keep everything on ONE page (single) or let it flow onto more pages (multi).
