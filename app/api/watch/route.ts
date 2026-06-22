@@ -4,16 +4,29 @@ import chokidar from 'chokidar'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-  const filePath = path.join(process.cwd(), 'resume.yaml')
+  const dir = process.cwd()
+  const filePath = path.join(dir, 'resume.yaml')
   const encoder = new TextEncoder()
 
   const stream = new ReadableStream({
     start(controller) {
-      const watcher = chokidar.watch(filePath, { ignoreInitial: true })
-
-      watcher.on('change', () => {
-        controller.enqueue(encoder.encode('data: reload\n\n'))
+      // Watch the directory, not the single file: atomic saves (write temp +
+      // rename over resume.yaml) replace the inode, which breaks a single-file
+      // watch and fires add/unlink instead of change. Watching the dir and
+      // reacting to add+change for resume.yaml survives atomic replaces.
+      const watcher = chokidar.watch(dir, {
+        ignoreInitial: true,
+        depth: 0,
+        awaitWriteFinish: { stabilityThreshold: 100, pollInterval: 20 },
       })
+
+      const onChange = (changed: string) => {
+        if (path.resolve(changed) === path.resolve(filePath)) {
+          controller.enqueue(encoder.encode('data: reload\n\n'))
+        }
+      }
+      watcher.on('change', onChange)
+      watcher.on('add', onChange)
 
       request.signal.addEventListener('abort', () => {
         watcher.close()
