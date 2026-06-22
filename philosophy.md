@@ -94,15 +94,17 @@ ignores weight, so bold's only job is to make the eye land on what matters. That
 *sparingly*: if everything is bold, nothing is. The rule, applied **uniformly across Experience
 and Projects**:
 
-- **Bold the metric/result** in every bullet that has one — numbers are the biggest credibility
-  lever, so the quantified outcome (`90%+ accuracy`, `2,000+ users`, `40K images`, `10–15%`) is
-  exactly what should pop.
-- **Bold one distinctive tool/tech** per bullet — the differentiating one (`TensorFlow`,
-  `EfficientNet-B0`, `Cloudflare Workers`), not the generic one.
-- **Don't bold ubiquitous or repeated terms.** A common language that appears in half the bullets
-  (e.g. Python) differentiates nothing and just makes a polka-dot page; it's already in Skills.
-  Bold a given term in one standout spot, not everywhere.
-- **Cap it at ~1–2 bold marks per bullet.** More than that is noise, not emphasis.
+- **Bold the metric/result only** — numbers are the biggest credibility lever, so the quantified
+  outcome (`90%+ accuracy`, `2,000+ users`, `40K images`, `≥95%`, `24/7`) is what should pop, and
+  nothing else competes with it.
+- **Don't bold tools or tech in bullets.** They're already listed in Skills (and, for projects, in
+  the `Name | stack` header), so bolding them in a bullet just emphasizes a duplicate and adds
+  noise. Name the tool in plain text; let the metric carry the bold.
+- **Bullets without a real metric get no bold** — that's fine, the contrast makes the quantified
+  bullets pop harder. Don't manufacture a bold to fill the gap.
+
+The principle behind all of this: **bold what isn't shown elsewhere.** Tools live in Skills and
+project headers; metrics live nowhere else, so they alone earn the weight.
 
 Bold runs render **wider** than plain text (see `CLAUDE.md`), so adding or removing `**markers**`
 can push a near-full bullet over a line — re-check the geometry after a bolding pass.
