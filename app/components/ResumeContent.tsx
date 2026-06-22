@@ -149,6 +149,12 @@ function EducationDetails({ entry }: { entry: EducationEntry }) {
   )
 }
 
+// Education date display: a "start – end" range when a start date exists, otherwise just the
+// end (graduation) date — so a student can omit `start` without leaving a dangling dash.
+function eduDateRange(entry: EducationEntry): string {
+  return entry.start ? `${entry.start} – ${entry.end}` : entry.end
+}
+
 function EducationItem({ entry, layout }: { entry: EducationEntry; layout: Layout | 'condensed' }) {
   if (layout === 'condensed') {
     // One line, no GPA/coursework — the post-grad/professional treatment.
@@ -166,7 +172,7 @@ function EducationItem({ entry, layout }: { entry: EducationEntry; layout: Layou
       <div className={s.entry}>
         <div className={s.entryRow}>
           <span><span className={s.bold}>{entry.degree}</span>{' – '}<span className={s.accentName}>{entry.school}</span></span>
-          <span className={s.muted}>{entry.start} – {entry.end}</span>
+          <span className={s.muted}>{eduDateRange(entry)}</span>
         </div>
         <EducationDetails entry={entry} />
       </div>
@@ -177,7 +183,7 @@ function EducationItem({ entry, layout }: { entry: EducationEntry; layout: Layou
       <div className={s.entry}>
         <div className={s.entryRow}>
           <span><span className={`${s.bold} ${s.accentName}`}>{entry.school}</span>, {entry.location}</span>
-          <span>{entry.start} – {entry.end}</span>
+          <span>{eduDateRange(entry)}</span>
         </div>
         <div className={s.italic}>{entry.degree}</div>
         <EducationDetails entry={entry} />
@@ -192,7 +198,7 @@ function EducationItem({ entry, layout }: { entry: EducationEntry; layout: Layou
       </div>
       <div className={s.entryRow}>
         <span className={s.italic}>{entry.degree}</span>
-        <span>{entry.start} – {entry.end}</span>
+        <span>{eduDateRange(entry)}</span>
       </div>
       <EducationDetails entry={entry} />
     </div>

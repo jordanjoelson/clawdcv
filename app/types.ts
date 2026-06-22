@@ -13,7 +13,9 @@ export interface EducationEntry {
   school: string
   degree: string
   location: string
-  start: string
+  // Optional — students usually only need the graduation (end) date. When omitted,
+  // the template renders just `end` instead of a "start – end" range.
+  start?: string
   end: string
   gpa?: number
   coursework?: string[]
