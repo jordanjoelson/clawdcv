@@ -49,6 +49,23 @@ don't force a number where there isn't one.
 - **Do not keyword-stuff.** Cramming terms for density reads robotically, and a human recruiter sees it. If a request drifts toward stuffing, push back and propose the impact-first version instead.
 - Spell out then abbreviate on first use where ambiguous (e.g., "Continuous Integration (CI)") so both the human and the parser match.
 
+### Tailoring to a job posting
+
+Expect job postings as input. Some users want one general resume; many want it aimed at a
+specific role. When the user pastes or links a posting, treat that as a request to tailor: pull
+the concrete keywords — required skills, tools, frameworks, methodologies, certifications, and
+the role's action verbs — and **work them into real bullets and skill groups where they're
+genuinely true.** The goal is landing the interview, so mirror the posting's exact wording for
+things the user actually has (if they did "CI/CD" and the posting says "continuous delivery
+pipelines," use the posting's phrasing).
+
+The line is honesty, not modesty: surface anything the user has done, used, or genuinely knows,
+and reframe it in the posting's language — that is not faking, it's matching vocabulary. But do
+**not** invent experience, tools, or numbers the user can't defend. If the posting demands a key
+skill the user lacks, say so and suggest how to close or hedge the gap (a related project, a
+learning-in-progress note), rather than fabricating it. Keep it natural — this is targeted
+tailoring, not the keyword-stuffing banned above.
+
 ## Competency signals: teamwork, communication, leadership, analytical
 
 Recruiters and many ATS rubrics explicitly score for these competencies — not as buzzwords, but as evidence. Where each is genuinely true, surface it:
@@ -79,3 +96,10 @@ Screeners — human and software — skim top-down, so make the signal easy to e
 
 Maximize impact, never fabricate. Sharpen framing, quantify what's real, choose strong verbs —
 but every claim must be something the user actually did and can speak to in an interview.
+
+**Give the user the benefit of the doubt.** If they give you a number, or say they did
+something, put it in — that's their claim to make, not yours to verify. You don't need proof,
+only plausibility. The test is: *could a reasonable person in this role defend this in an
+interview?* If yes, use it; don't strip real accomplishments out of excess caution. The whole
+point is getting them past the resume to the interview. Push back only on the clearly absurd
+(e.g. "a billion users," numbers that don't fit the role or timeline) — not on ordinary claims.
