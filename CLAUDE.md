@@ -31,6 +31,15 @@ Keep one **base** resume and save each **tailored** copy as its own file, so the
 
 Before re-gearing the active resume for a new target, **save the current `resume.yaml` to a named variant first** so nothing is lost, then edit. To switch versions, copy the wanted file over `resume.yaml` and re-render. Every variant is gitignored (personal, via `resume.*.yaml`); only `resume.yaml` is tracked. When the user finishes a tailored pass, **offer to save it as `resume.<slug>.yaml`** — don't let good tailored content live only in the working file where the next re-gear overwrites it.
 
+## Cover letters
+
+A cover letter is optional and lives in **`coverletter.yaml`** (personal, gitignored like resume variants; tailored copies are `coverletter.<slug>.yaml`). It renders as its **own page** in the active resume template's font, so a combined PDF reads as one cohesive document. The shape is a formal address-block letter: `sender` (name defaults to the resume's; `lines` are address/contact lines), `date`, `recipient` (name/title/company + extra `lines`), `greeting` (defaults to "Dear Hiring Manager,"), `body` (a list of paragraphs, **bold** honored), `closing` (defaults to "Sincerely,"), and `signature`. Only `body` is required; omit the rest and it's left out.
+
+- **Writing it:** generate a **general** letter from the resume, or **tailor** it when the user drops a job posting (pull the role's real keywords into the body where true, per `philosophy.md`). Same honesty/no-fabrication rules as the resume. **No em dashes** (this is application text the user submits).
+- **Length:** keep it to one page. `geometry.json` gains a `coverLetter` block (`contentHeight`, `capacity`, `remaining`, `linesRemaining`, `fits`) and a warning when it overflows — trim until `fits` is true. Body paragraphs are **prose, not bullets**, so they are NOT held to the ≥95% fill rule.
+- **Preview & export:** the browser shows the resume and the cover letter stacked. The Save-PDF menu gains three options once `coverletter.yaml` exists: **Resume**, **Cover letter**, and **Resume + Cover letter** (the combined file renders each separately and concatenates them, so the cover-letter page carries **no** resume continuation header). Until a cover letter exists, the export button behaves exactly as before.
+- **Saving variants:** like resumes, offer to save a finished tailored letter as `coverletter.<slug>.yaml`, and copy the wanted file over `coverletter.yaml` to switch.
+
 ## Shaping the template to the user's content
 
 The template is the user's to shape, not a fixed mold — but stay efficient about it. When the user gives content that doesn't map to an existing section (Honors & Activities, awards, publications, a personal website, leadership, certifications), **don't silently invent a section or silently drop the content.** Surface the choice in one quick question: keep it as its own new section, fold it into an existing section, or leave it out. Then act.
