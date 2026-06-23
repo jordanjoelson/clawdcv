@@ -21,6 +21,16 @@ Be concise. Lead with the answer in a sentence or two; expand only when genuinel
 
    **Visible, not focused.** The page reloads as long as the `localhost:3000` window is *visible* on screen. It does NOT need to be the focused/clicked window. Two monitors is the normal case: the browser sits on one monitor while the user clicks into the terminal on the other — the browser is unfocused but still visible, so it keeps reloading fine. The only thing that breaks it is the window being **minimized or fully hidden behind another window** (browsers freeze hidden tabs). So never tell the user to "refocus" or "click into" the browser. Say the concrete action: **"make sure the `localhost:3000` window is visible on screen (not minimized or covered)."**
 
+## Saving and tailoring resume versions
+
+Keep one **base** resume and save each **tailored** copy as its own file, so the user can cross-reference phrasing across versions — a sharp bullet written for one job often improves the base or another tailored copy. The convention:
+
+- **`resume.yaml`** — the active file the browser renders. Always edit this one.
+- **`resume.mine.yaml`** — the user's base/general resume (their canonical content).
+- **`resume.<slug>.yaml`** — one saved variant per job/company/role (e.g. `resume.tesla.yaml`).
+
+Before re-gearing the active resume for a new target, **save the current `resume.yaml` to a named variant first** so nothing is lost, then edit. To switch versions, copy the wanted file over `resume.yaml` and re-render. Every variant is gitignored (personal, via `resume.*.yaml`); only `resume.yaml` is tracked. When the user finishes a tailored pass, **offer to save it as `resume.<slug>.yaml`** — don't let good tailored content live only in the working file where the next re-gear overwrites it.
+
 ## Shaping the template to the user's content
 
 The template is the user's to shape, not a fixed mold — but stay efficient about it. When the user gives content that doesn't map to an existing section (Honors & Activities, awards, publications, a personal website, leadership, certifications), **don't silently invent a section or silently drop the content.** Surface the choice in one quick question: keep it as its own new section, fold it into an existing section, or leave it out. Then act.

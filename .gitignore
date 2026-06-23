@@ -44,6 +44,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local .docx extractions + personal resume backup (not part of the app)
+# local .docx extractions + personal/tailored resume versions (not part of the app).
+# resume.yaml is the active file the app renders and stays tracked; every saved
+# variant (resume.mine.yaml base, resume.<job>.yaml tailored copies) is personal
+# and stays local.
 _docx_*/
 resume.mine.yaml
+resume.*.yaml
+!resume.yaml
