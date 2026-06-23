@@ -60,13 +60,29 @@ async function stampHeaders(pdfBytes: Uint8Array, h: HeaderStyle): Promise<Uint8
   return await doc.save()
 }
 
-export async function GET() {
-  let browser
+// Concatenate several PDFs into one (used for the combined resume + cover letter export).
+// Rendering each document on its own and merging — rather than printing one ?doc=both DOM —
+// keeps the cover letter free of the resume's continuation header: only the resume render is
+// stamped, the cover render is not, and the merge just appends the cover's page(s) after.
+async function mergePdfs(parts: Uint8Array[]): Promise<Uint8Array> {
+  const out = await PDFDocument.create()
+  for (const bytes of parts) {
+    const src = await PDFDocument.load(bytes)
+    const pages = await out.copyPages(src, src.getPageIndices())
+    pages.forEach(p => out.addPage(p))
+  }
+  return await out.save()
+}
+
+// Render one document (?doc=resume or ?doc=cover) to a PDF on the given browser. `stamp`
+// controls the continuation running-header (resume only — the cover letter never gets it).
+async function renderOne(browser: import('puppeteer').Browser, doc: 'resume' | 'cover', stamp: boolean): Promise<Uint8Array> {
+  const page = await browser.newPage()
   try {
-    browser = await puppeteer.launch()
-    const page = await browser.newPage()
     await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 1 })
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle2', timeout: 10000 })
+    // ?print=1 tells GeometryCapture to skip measuring (this render is transient and must not
+    // overwrite the live editing view's geometry.json).
+    await page.goto(`http://localhost:3000?doc=${doc}&print=1`, { waitUntil: 'networkidle2', timeout: 10000 })
 
     // Strip shell + reset zoom, and read the running header's live style (so the stamped PDF
     // header matches whatever template is active — font family, sizes, colours, rule weight).
@@ -109,16 +125,39 @@ export async function GET() {
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
     })
 
-    // Stamp the continuation header onto pages 2+ (no-op for a single-page resume). This
-    // happens AFTER rendering, so it can't disturb the page-1 layout or the pagination.
-    const out = await stampHeaders(pdf, header)
+    // Stamp the continuation header onto pages 2+ (no-op for a single-page doc). This happens
+    // AFTER rendering, so it can't disturb the page-1 layout or the pagination. The cover
+    // letter is never stamped (stamp=false) — it's a standalone letter, not a resume page.
+    return stamp ? await stampHeaders(pdf, header) : new Uint8Array(pdf)
+  } finally {
+    await page.close()
+  }
+}
+
+export async function GET(request: Request) {
+  // ?doc=resume (default) | cover | both. 'both' renders each document on its own and
+  // concatenates them, so the cover letter page carries no resume continuation header.
+  const docParam = new URL(request.url).searchParams.get('doc')
+  const doc: 'resume' | 'cover' | 'both' = docParam === 'cover' || docParam === 'both' ? docParam : 'resume'
+
+  let browser
+  try {
+    browser = await puppeteer.launch()
+    let out: Uint8Array
+    if (doc === 'both') {
+      const resumePdf = await renderOne(browser, 'resume', true)
+      const coverPdf = await renderOne(browser, 'cover', false)
+      out = await mergePdfs([resumePdf, coverPdf])
+    } else {
+      out = await renderOne(browser, doc, doc === 'resume')
+    }
 
     // Copy into a fresh ArrayBuffer-backed Uint8Array (a valid BodyInit; the raw buffers can
     // in theory be SharedArrayBuffer-backed, which the Response type rejects).
     return new Response(new Uint8Array(out), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="resume.pdf"',
+        'Content-Disposition': `attachment; filename="${doc}.pdf"`,
       },
     })
   } catch (err) {

@@ -5,7 +5,9 @@ import { useState } from 'react'
 //   1 (default)     FirstName_LastName_Resume.pdf            — clean, easy to find
 //   2 (per company) FirstName_LastName_Company_Resume.pdf    — for targeted / higher-volume applying
 //   3 (per version) FirstName_LastName_SWE_Resume.pdf        — one file per role focus (SWE / AI_ML / Research)
-export default function ExportButton({ name }: { name: string }) {
+type Doc = 'resume' | 'cover' | 'both'
+
+export default function ExportButton({ name, hasCover = false }: { name: string; hasCover?: boolean }) {
   const [busy, setBusy] = useState(false)
   const [open, setOpen] = useState(false)
   const [company, setCompany] = useState('')
@@ -16,22 +18,28 @@ export default function ExportButton({ name }: { name: string }) {
   const base = (tokens.length > 1 ? `${tokens[0]}_${tokens[tokens.length - 1]}` : tokens[0] || 'Resume')
     .replace(/[^A-Za-z0-9_]/g, '')
   const clean = (s: string) => s.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_]/g, '')
-  const fileName = (suffix = '') => `${base}${suffix ? '_' + clean(suffix) : ''}_Resume.pdf`
+  // Filename label follows the document being exported.
+  const docLabel: Record<Doc, string> = {
+    resume: 'Resume', cover: 'Cover_Letter', both: 'Resume_and_Cover_Letter',
+  }
+  const fileName = (suffix = '', doc: Doc = 'resume') =>
+    `${base}${suffix ? '_' + clean(suffix) : ''}_${docLabel[doc]}.pdf`
 
   // Generate the PDF server-side via the puppeteer /api/pdf route. page.pdf() emits a real
   // vector PDF with selectable, embedded text (ATS-parsable — not an image) and exact margins,
-  // with no browser header/footer chrome. The download matches the preview.
-  const download = async (suffix = '') => {
+  // with no browser header/footer chrome. The download matches the preview. `doc` selects the
+  // resume, the cover letter, or both merged into one file.
+  const download = async (suffix = '', doc: Doc = 'resume') => {
     if (busy) return
     setBusy(true)
     try {
-      const res = await fetch('/api/pdf')
+      const res = await fetch(`/api/pdf?doc=${doc}`)
       if (!res.ok) throw new Error(await res.text())
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = fileName(suffix)
+      a.download = fileName(suffix, doc)
       a.click()
       URL.revokeObjectURL(url)
       setOpen(false)
@@ -75,6 +83,19 @@ export default function ExportButton({ name }: { name: string }) {
           <div style={{ fontSize: '11px', color: '#64748b' }}>
             Default: <code style={{ color: '#1e293b' }}>{fileName()}</code>
           </div>
+
+          {/* Document picker — only when a cover letter exists. Each button downloads
+              immediately: resume only, cover letter only, or both merged into one PDF. */}
+          {hasCover && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: '#334155' }}>Document</span>
+              <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                <button style={chip} disabled={busy} onClick={() => download('', 'resume')}>Resume</button>
+                <button style={chip} disabled={busy} onClick={() => download('', 'cover')}>Cover letter</button>
+                <button style={chip} disabled={busy} onClick={() => download('', 'both')}>Resume + Cover letter</button>
+              </div>
+            </div>
+          )}
 
           {/* Option 2 — target a company */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>

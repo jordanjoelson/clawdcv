@@ -52,3 +52,6 @@ _docx_*/
 resume.mine.yaml
 resume.*.yaml
 !resume.yaml
+# Cover letter is personal content too — the active file and any tailored variants stay local.
+coverletter.yaml
+coverletter.*.yaml

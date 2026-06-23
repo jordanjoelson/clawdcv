@@ -246,6 +246,51 @@
   padding-left: var(--bullet-indent);
 }
 
+/* ── Cover letter ──────────────────────────────────────────────────────────────
+   Rendered in its own .page card, so it inherits the active template's font, size,
+   and accent --vars — a combined PDF reads as one cohesive document. A formal
+   address-block letter: blocks separated by vertical rhythm, body paragraphs in the
+   bullet font with comfortable leading. No headings/rules (it's prose, not sections). */
+.cover {
+  font-size: var(--bullet-fs);
+  line-height: 1.4;
+}
+
+.coverSender {
+  margin-bottom: var(--section-mt);
+}
+
+.coverDate {
+  margin: 0 0 var(--section-mt) 0;
+}
+
+.coverRecipient {
+  margin: 0 0 var(--section-mt) 0;
+}
+
+.coverGreeting {
+  margin: 0 0 10pt 0;
+}
+
+/* Body paragraphs: block-style (no indent), separated by a blank line. */
+.coverPara {
+  margin: 0 0 10pt 0;
+  text-align: left;
+}
+
+.coverClosing {
+  margin-top: 14pt;
+}
+
+.coverClosing p {
+  margin: 0;
+}
+
+/* Space for a handwritten signature between the closing and the typed name. */
+.coverSignature {
+  margin-top: 24pt !important;
+}
+
 /* ── Compact template ─────────────────────────────────────────────────────────
    Denser variant in Georgia: smaller type, tighter vertical rhythm, thin section
    rules, justified bullet text. Switched on by data-template="compact" (from

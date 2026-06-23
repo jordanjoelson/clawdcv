@@ -83,6 +83,27 @@ export interface Resume {
   honorsTitle?: string
 }
 
+// A cover letter, rendered as its own page in the active resume template's font/look.
+// Stored in coverletter.yaml (personal, gitignored like resume variants). Every field
+// except `body` is optional and presence-gated, so a minimal letter is just `body: [...]`.
+export interface CoverLetter {
+  // Sender block at the top (formal letter head). `name` defaults to the resume's name
+  // when omitted; `lines` are address/contact lines under it (e.g. "Austin, TX").
+  sender?: { name?: string; lines?: string[] }
+  // Date line, free text (e.g. "June 23, 2026"). Omit to leave it out.
+  date?: string
+  // Recipient block: name / title / company, then any extra address `lines`.
+  recipient?: { name?: string; title?: string; company?: string; lines?: string[] }
+  // Salutation. Defaults to "Dear Hiring Manager," when omitted.
+  greeting?: string
+  // Body paragraphs, one string each. **bold** markers honored like resume bullets.
+  body: string[]
+  // Closing line. Defaults to "Sincerely," when omitted.
+  closing?: string
+  // Typed signature name under the closing; defaults to sender name, then resume name.
+  signature?: string
+}
+
 export type TemplateName = 'jake' | 'compact' | 'cns' | 'business' | 'modern' | 'professional' | 'jake-pro'
 
 // Rendering preferences (profile.yaml). Separate from resume content. Each template bundles

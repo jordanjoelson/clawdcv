@@ -47,6 +47,19 @@ html[data-badges="off"] [data-geo] { display: none !important; }
   }
   [data-page="0"] [data-page-shift] { margin-top: 0 !important; }
 
+  /*
+    Cover letter (?doc=cover render): the card carries the page's 0.5in pad-top, so drop the
+    element's bottom padding (the @page boxes own the bottom margin, as with the resume) and
+    let it grow to natural height so @page paginates any overflow onto a second sheet. The
+    cover render is never stamped, so it gets no running header.
+  */
+  [data-cover-page] {
+    min-height: unset !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+  }
+
   html, body {
     margin: 0 !important;
     padding: 0 !important;

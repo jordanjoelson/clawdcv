@@ -25,6 +25,11 @@ export default function GeometryCapture({ data, layout, boldKeywords = true }: {
     const touchedCards = new Map<HTMLElement, string>()
 
     const run = async () => {
+      // Skip on PDF-export renders (puppeteer navigates with ?print=1). Those renders are
+      // transient and document-scoped (?doc=resume|cover), so measuring one would clobber the
+      // live editing view's geometry.json with a partial snapshot. Badges are hidden in print.
+      if (new URLSearchParams(location.search).has('print')) return
+
       // Wait for the active font to actually load before measuring, so the probe, Pretext,
       // and the real bullets all agree on glyph widths. System fonts (Calibri) resolve
       // instantly; this only matters once a non-installed/web font is in play.
@@ -234,6 +239,27 @@ export default function GeometryCapture({ data, layout, boldKeywords = true }: {
       }))
       if (contentHeight > capacity) warnings.push(`page overflows by ${contentHeight - capacity}px`)
 
+      // Cover letter (if rendered on this view) — report whether its prose fits one page.
+      // It's paragraphs, not bullets, so it's NOT held to the ≥95% rule: no per-line fill,
+      // just page fit so the agent knows when to trim/tighten the letter.
+      let coverLetter: object | undefined
+      const coverCard = document.querySelector('[data-cover-page]') as HTMLElement | null
+      const coverContent = coverCard?.querySelector('[data-cover-content]') as HTMLElement | null
+      if (coverCard && coverContent) {
+        const ccs = getComputedStyle(coverCard)
+        const cPadTop = parseFloat(ccs.paddingTop) || 48
+        const cPadBot = parseFloat(ccs.paddingBottom) || 48
+        const cHeight = Math.round(coverContent.offsetHeight)
+        const cCapacity = Math.round(11 * 96) - cPadTop - cPadBot
+        const cRemaining = cCapacity - cHeight
+        coverLetter = {
+          contentHeight: cHeight, capacity: cCapacity, remaining: cRemaining,
+          linesRemaining: Math.max(0, Math.floor(cRemaining / lineHeight)),
+          fits: cHeight <= cCapacity,
+        }
+        if (cHeight > cCapacity) warnings.push(`cover letter overflows page by ${cHeight - cCapacity}px`)
+      }
+
       fetch('/api/geometry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -241,7 +267,9 @@ export default function GeometryCapture({ data, layout, boldKeywords = true }: {
           font, calibration: Math.round(CALIBRATION * 100000) / 100000,
           containerWidth, lineHeight,
           page: { contentHeight, capacity, remaining, linesRemaining },
-          experience, projects, fillLines, warnings,
+          experience, projects, fillLines,
+          ...(coverLetter ? { coverLetter } : {}),
+          warnings,
         }, null, 2),
       })
     }
