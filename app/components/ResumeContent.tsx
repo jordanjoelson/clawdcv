@@ -274,15 +274,17 @@ function ProjectItem({ entry, bulletData, bold = true, layout }: { entry: Projec
   // muted technologies line beneath — no dates. Other layouts keep the name | tech header with
   // dates on the right and a bulleted list below.
   if (layout === 'modern') {
+    // Projects render as bullets (consistent with Experience and the other templates); the muted
+    // technologies line sits as a subtitle directly under the name, above the bullets — no dates.
     return (
       <div className={s.entry}>
         <div className={s.entryRow}>
           {projectName(entry)}
         </div>
-        <p className={s.projectDesc}>
-          {entry.bullets.map((b, i) => <span key={i}>{i > 0 ? ' ' : ''}{bulletNodes(b, bold)}</span>)}
-        </p>
         {entry.technologies.length > 0 && <p className={s.techLine}>{entry.technologies.join(', ')}</p>}
+        <ul className={s.bullets} {...(bulletData ? { 'data-bullets': true } : {})}>
+          {entry.bullets.map((b, i) => <li key={i}>{bulletNodes(b, bold)}</li>)}
+        </ul>
       </div>
     )
   }
