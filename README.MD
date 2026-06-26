@@ -91,6 +91,8 @@ The agent edits `resume.yaml`, watches the measurements in `geometry.json`, and 
 
 **Export it.** Click the export button on the page. You get a clean PDF with a sensible, recruiter-friendly filename.
 
+**Then apply early.** Postings get the most attention from recruiters in their first day or two, so the sooner you apply the better. [intern-list.com](https://www.intern-list.com/) lists newly posted internships as they go up, and [JobRight](https://jobright.ai/) can autofill applications from your resume. Tailor a copy here, export it, and carry it straight into those applications while the posting is still fresh.
+
 ## How it works (the loop)
 
 ```
