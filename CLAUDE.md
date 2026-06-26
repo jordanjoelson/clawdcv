@@ -11,6 +11,8 @@ Be concise. Lead with the answer in a sentence or two; expand only when genuinel
 
 **No em dashes in the resume or in application/cover text you write for the user.** They read as an AI tell. Use commas, colons, periods, or parentheses (preferred) instead; keep en-dashes only inside numeric ranges (e.g. "10-15%"). This is about the documents you produce, not this chat: conversational replies to the user can use any punctuation.
 
+**First run / getting started.** When the user is new (e.g. they say "help me get started", or `resume.yaml` is still the shipped placeholder), open with a short intake instead of waiting: one line on what this is, make sure the `localhost:3000` preview is up and visible, then run the conversational intake (target role; a **specific posting to tailor to** vs a **general** resume; **single** vs multi page) and offer the fastest path, "paste your LinkedIn export or an existing resume, or just describe your latest role." Build the first draft from whatever they give. Keep it brief and action-first, don't make them hunt for how to start. (The intake decisions are detailed under *Intake* and *profile.pages* below.)
+
 ## Workflow
 
 1. Read `geometry.json` before making any edits — it contains the current layout state measured by Pretext in the browser

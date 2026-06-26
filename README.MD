@@ -69,6 +69,8 @@ npm run dev
 
 Open **http://localhost:3000**. You'll see your resume. Keep that tab open and visible on screen, since it redraws itself every time `resume.yaml` is saved.
 
+**Getting started:** open this folder in your coding agent and say *"help me get started."* It walks you through a quick intake, your target role, whether you have a specific job posting to tailor to or want a general resume, and one page or more, then builds your first draft from whatever you give it (paste a LinkedIn export or an old resume, or just describe your latest role). No forms; you just talk.
+
 ## How to use it
 
 You can use it in two ways.
