@@ -7,10 +7,14 @@ import { useState } from 'react'
 //   3 (per version) FirstName_LastName_SWE_Resume.pdf        — one file per role focus (SWE / AI_ML / Research)
 type Doc = 'resume' | 'cover' | 'both'
 
-export default function ExportButton({ name, hasCover = false }: { name: string; hasCover?: boolean }) {
+// `coverCompany` is the company the active cover letter is addressed to (coverletter.yaml's
+// recipient.company). When a tailored letter exists we already know the target, so pre-fill the
+// company field with it — a cover-letter download then carries the company without retyping
+// (e.g. Jordan_Joelson_Astranis_Cover_Letter.pdf). Empty for a general letter or no cover.
+export default function ExportButton({ name, hasCover = false, coverCompany = '' }: { name: string; hasCover?: boolean; coverCompany?: string }) {
   const [busy, setBusy] = useState(false)
   const [open, setOpen] = useState(false)
-  const [company, setCompany] = useState('')
+  const [company, setCompany] = useState(coverCompany)
   const [version, setVersion] = useState('')
 
   // FirstName_LastName from the resume name (first + last token), filename-safe.
@@ -90,9 +94,11 @@ export default function ExportButton({ name, hasCover = false }: { name: string;
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: '#334155' }}>Document</span>
               <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                {/* Cover/both default to the active letter's company (editable in section 2),
+                    so a tailored download is self-identifying without retyping. */}
                 <button style={chip} disabled={busy} onClick={() => download('', 'resume')}>Resume</button>
-                <button style={chip} disabled={busy} onClick={() => download('', 'cover')}>Cover letter</button>
-                <button style={chip} disabled={busy} onClick={() => download('', 'both')}>Resume + Cover letter</button>
+                <button style={chip} disabled={busy} onClick={() => download(company, 'cover')}>Cover letter</button>
+                <button style={chip} disabled={busy} onClick={() => download(company, 'both')}>Resume + Cover letter</button>
               </div>
             </div>
           )}

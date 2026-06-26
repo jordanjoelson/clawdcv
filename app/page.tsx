@@ -59,7 +59,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
         {showCover && <CoverLetterContent data={cover!} resumeName={data.name} boldKeywords={profile.boldKeywords} template={profile.template} />}
       </div>
       {process.env.NODE_ENV === 'development' && <BadgeToggle />}
-      <ExportButton name={data.name} hasCover={cover !== null} />
+      <ExportButton name={data.name} hasCover={cover !== null} coverCompany={cover?.recipient?.company ?? ''} />
     </main>
   )
 }
