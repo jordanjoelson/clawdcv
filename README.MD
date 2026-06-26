@@ -116,6 +116,8 @@ You set these in **`profile.yaml`**:
 - **`boldKeywords`**: `true` renders the `**bold**` markers in your bullets as bold text; `false` strips them out to plain text.
 - **`pages`**: `single` keeps everything on one page (the default, and what most students and new grads want); `multi` lets your resume run onto more pages, adding a small running header (your name and "Page X of Y") to each page after the first.
 
+**Bring your own template.** The seven above aren't a fixed menu. You can ask the agent to add your own: describe the look you want (font, colors, spacing, how the name and section headings sit) or point it at a resume style you like, and it wires up a new template you then select with `template: <name>` in `profile.yaml`. You don't have to think about the measurements. The layout engine reads the font and column width live from the rendered page, with no hardcoded numbers, so a new template calibrates itself and the same one-page and 95%-fill checks apply automatically. For example: *"add a template with a serif font, a centered name, and tighter spacing, then switch to it."*
+
 The sections are flexible: an optional Professional Summary and a Core Competencies grid (used by the `modern` template), contact (with an optional website and location), education (with optional coursework, leadership, and awards lines), experience, projects, free-form skill groups with any labels you want, an optional Leadership / Community Involvement section, and a closing list section whose heading you choose (`honorsTitle`: "Honors," "Leadership," "Awards," or whatever fits). Most section headings are renamable too (`experienceTitle`, `skillsTitle`, `competenciesTitle`, `leadershipTitle`, `honorsTitle`), so you can match a specific format.
 
 ## The files
