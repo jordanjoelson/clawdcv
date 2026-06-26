@@ -91,6 +91,8 @@ The agent edits `resume.yaml`, watches the measurements in `geometry.json`, and 
 
 **Edit it by hand.** Open `resume.yaml`, change the text, and save. The browser reloads and updates `geometry.json`, so you can see what fit and what didn't.
 
+**Check your fit against a posting (optional).** Paste a job description and ask how you stack up. You get an honest coverage readout: which of the posting's skills and keywords you already cover (and where), which are missing, and which you genuinely have but haven't surfaced, so you can weave them in truthfully. It's deliberately **not an "ATS score"** and there's no number to chase (real ATS doesn't work that way, and chasing a score just leads to keyword-stuffing), just a clear map of where to tailor. Skip it entirely if you'd rather.
+
 **Export it.** Click the export button on the page. You get a clean PDF with a sensible, recruiter-friendly filename.
 
 **Then apply early.** Postings get the most attention from recruiters in their first day or two, so the sooner you apply the better. [intern-list.com](https://www.intern-list.com/) lists newly posted internships as they go up, and [JobRight](https://jobright.ai/) can autofill applications from your resume. Tailor a copy here, export it, and carry it straight into those applications while the posting is still fresh.

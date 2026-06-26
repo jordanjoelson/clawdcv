@@ -71,6 +71,24 @@ Not built yet (deliberate next steps, not part of v1): a browser table view, and
 auto-logging from the export button (would need an `/api/applications` POST route, mirroring how
 `/api/geometry` writes its file). v1 is the file plus the rule above.
 
+## Job-description coverage check
+
+On request (or as part of tailoring), produce an honest **coverage / gap readout** of the resume
+against a pasted job posting — the content analog of what `geometry.json` does for layout. It's
+**user-invoked and optional**, no UI, agent-driven analysis output as a chat table.
+
+- **Three buckets:** (1) **covered** — with *where* it appears in the resume; (2) **missing**;
+  (3) **true but not shown** — things the user genuinely has, reframed in the posting's language.
+  Mark **required vs bonus**, flag the **weakest required area**, and call out honest gaps to
+  address rather than fake (per `philosophy.md`).
+- **NEVER a numeric "ATS score" / match percentage.** Real ATS parses and stores the resume for
+  recruiter search; it does not gate on a %. A score is pseudo-precision that invites
+  keyword-stuffing to inflate the number, which contradicts the honesty rules. Decline the number,
+  give the coverage map instead.
+- **Then offer to act on it:** apply honest reframes (surface a genuinely-used tool in a real
+  bullet, reword a bullet into the posting's vocabulary) and tailor toward the target. Pairs with
+  the application tracker — store the posting URL on that company's entry (`link`).
+
 ## Shaping the template to the user's content
 
 The template is the user's to shape, not a fixed mold — but stay efficient about it. When the user gives content that doesn't map to an existing section (Honors & Activities, awards, publications, a personal website, leadership, certifications), **don't silently invent a section or silently drop the content.** Surface the choice in one quick question: keep it as its own new section, fold it into an existing section, or leave it out. Then act.
