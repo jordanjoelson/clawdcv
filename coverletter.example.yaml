@@ -1,0 +1,37 @@
+# Cover letter — EXAMPLE / reference (committed). This file does NOT render; only `coverletter.yaml`
+# does. Copy this to `coverletter.yaml` (or just ask the agent to "write a cover letter for X") to
+# start one. A cover letter is optional and personal, so your real `coverletter.yaml` stays local.
+#
+# Lifecycle (so a letter you already sent doesn't sit on the page forever):
+#   - An empty / bodyless coverletter.yaml renders nothing — the preview is resume-only.
+#   - While you're tailoring one, it renders as its own page in the active resume template.
+#   - When you've used it, the agent archives it as coverletter.<company>.yaml and clears
+#     coverletter.yaml back to empty. To reuse one later, copy the archive over coverletter.yaml.
+#
+# Only `body` is required; omit any other field and it's left out.
+
+sender:
+  name: Your Name
+  lines:
+    - City, State
+    - you@email.com
+    - "555-555-5555"
+
+date: January 1, 2026
+
+recipient:
+  name: Hiring Team
+  title:
+  company: Company Name
+  lines:
+    - City, State
+
+greeting: Dear Hiring Manager,
+
+body:
+  - "Opening paragraph: the role you're applying for and the one-line reason you're a strong fit."
+  - "Body paragraph: concrete, true evidence pulled from your resume in the posting's own language."
+  - "Closing paragraph: a brief, confident sign-off and a pointer to your portfolio or GitHub."
+
+closing: Sincerely,
+signature: Your Name

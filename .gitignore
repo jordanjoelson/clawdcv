@@ -53,8 +53,10 @@ resume.mine.yaml
 resume.*.yaml
 !resume.yaml
 # Cover letter is personal content too — the active file and any tailored variants stay local.
+# coverletter.example.yaml is the committed, non-rendering reference (kept tracked via the !rule).
 coverletter.yaml
 coverletter.*.yaml
+!coverletter.example.yaml
 # Application tracker is personal (which companies you've applied to and where they stand).
 applications.yaml
 applications.*.yaml
