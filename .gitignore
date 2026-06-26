@@ -55,3 +55,6 @@ resume.*.yaml
 # Cover letter is personal content too — the active file and any tailored variants stay local.
 coverletter.yaml
 coverletter.*.yaml
+# Application tracker is personal (which companies you've applied to and where they stand).
+applications.yaml
+applications.*.yaml

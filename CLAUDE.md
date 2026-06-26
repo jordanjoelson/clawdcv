@@ -40,6 +40,34 @@ A cover letter is optional and lives in **`coverletter.yaml`** (personal, gitign
 - **Preview & export:** the browser shows the resume and the cover letter stacked. The Save-PDF menu gains three options once `coverletter.yaml` exists: **Resume**, **Cover letter**, and **Resume + Cover letter** (the combined file renders each separately and concatenates them, so the cover-letter page carries **no** resume continuation header). Until a cover letter exists, the export button behaves exactly as before.
 - **Saving variants:** like resumes, offer to save a finished tailored letter as `coverletter.<slug>.yaml`, and copy the wanted file over `coverletter.yaml` to switch.
 
+## Application tracker
+
+`applications.yaml` (personal, gitignored like resume/cover variants) tracks which companies the
+user is targeting and where each stands. It is **chat-driven with no UI** — the user talks
+("applied to Astranis", "what's still todo?", "Tesla rejected") and you keep the file in sync. One
+entry per company/role: `company`, `role`, `status`, `variant` (the tailored-files slug), `applied`
+(date), `link` (posting), `notes`.
+
+- **Status funnel:** `todo → applied → interview → offer → rejected`. `todo` = tailored/prepped but
+  not yet submitted. **Saving a variant or exporting a PDF is NOT applying** — never infer `applied`
+  from a file existing; only the user confirming sets it (and the `applied:` date).
+- **How you find out / when you ask** (the two ways status enters the file):
+  - *From the user:* they tell you ("applied to X", "X rejected", "interview at Y") — update on that.
+  - *Auto-log (agent-driven, the only automatic part):* whenever you save a tailored
+    `resume.<slug>.yaml` / `coverletter.<slug>.yaml` or export-name a company PDF, add/update a
+    `todo` entry for that company **in the same step**, then mention it in one line. This captures
+    the target the moment it's known so nothing slips between tailoring and applying.
+  - *When to ask:* after finishing a tailoring pass for a company, confirm in ONE line whether to
+    mark it `applied` or leave `todo` — ask once, don't nag. When the user asks "where am I / what's
+    left", read the file back grouped by status.
+- **Dedup by company/slug:** if an entry already exists, update it — never add a duplicate.
+- **Variant link:** set `variant` to the slug so each application points at the exact resume + cover
+  letter that went out.
+
+Not built yet (deliberate next steps, not part of v1): a browser table view, and app-side
+auto-logging from the export button (would need an `/api/applications` POST route, mirroring how
+`/api/geometry` writes its file). v1 is the file plus the rule above.
+
 ## Shaping the template to the user's content
 
 The template is the user's to shape, not a fixed mold — but stay efficient about it. When the user gives content that doesn't map to an existing section (Honors & Activities, awards, publications, a personal website, leadership, certifications), **don't silently invent a section or silently drop the content.** Surface the choice in one quick question: keep it as its own new section, fold it into an existing section, or leave it out. Then act.
