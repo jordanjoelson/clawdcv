@@ -5,7 +5,13 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const dir = process.cwd()
-  const filePath = path.join(dir, 'resume.yaml')
+  // Reload on any of the three live inputs, not just resume.yaml: profile.yaml drives the
+  // template/length (so switching templates refreshes + recalibrates geometry seamlessly) and
+  // coverletter.yaml drives the cover-letter page. Without profile.yaml here, a template switch
+  // would render stale until something touched resume.yaml.
+  const watched = new Set(
+    ['resume.yaml', 'profile.yaml', 'coverletter.yaml'].map((f) => path.resolve(dir, f)),
+  )
   const encoder = new TextEncoder()
 
   const stream = new ReadableStream({
@@ -21,7 +27,7 @@ export async function GET(request: Request) {
       })
 
       const onChange = (changed: string) => {
-        if (path.resolve(changed) === path.resolve(filePath)) {
+        if (watched.has(path.resolve(changed))) {
           controller.enqueue(encoder.encode('data: reload\n\n'))
         }
       }
