@@ -93,6 +93,8 @@ The agent edits `resume.yaml`, watches the measurements in `geometry.json`, and 
 
 **Then apply early.** Postings get the most attention from recruiters in their first day or two, so the sooner you apply the better. [intern-list.com](https://www.intern-list.com/) lists newly posted internships as they go up, and [JobRight](https://jobright.ai/) can autofill applications from your resume. Tailor a copy here, export it, and carry it straight into those applications while the posting is still fresh.
 
+**Track where you applied.** Ask the agent to track your applications and it keeps an `applications.yaml` for you: one entry per company, with a status (todo → applied → interview → offer → rejected) linked to the exact tailored resume and cover letter you sent. You drive it by chat (*"applied to Astranis," "what's still todo?," "Tesla rejected"*) and can ask for a table any time. Saving a variant or exporting a PDF for a company logs it as `todo`; only you confirming marks it `applied`. Like your resume, it stays on your machine.
+
 ## How it works (the loop)
 
 ```
@@ -126,6 +128,8 @@ The sections are flexible: an optional Professional Summary and a Core Competenc
 |------|---------------|
 | `resume.yaml` | Your resume content. The main thing you edit. |
 | `profile.yaml` | Look, feel, and length: template, bold keywords, single or multi page. |
+| `coverletter.yaml` | Optional cover letter. Renders as its own page in the same template; exports separately or merged with the resume. Personal, stays local. |
+| `applications.yaml` | Optional tracker the agent keeps: which companies you applied to and where each stands. Personal, stays local. |
 | `geometry.json` | Generated automatically. The live layout measurements. **Don't edit it.** |
 | `philosophy.md` | How good bullets get written (the agent reads this). |
 | `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` | Instructions for the AI agent (any agent finds its way to the same manual). |
