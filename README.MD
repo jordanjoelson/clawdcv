@@ -45,6 +45,7 @@ A lot of resume websites ask you to make an account, hand over your data, and pa
 - **It measures the layout so you don't have to.** Most tools leave you to eyeball whether a line looks full, or whether your text quietly spilled onto a second page. Here the agent checks every bullet down to the pixel, so you don't end up with awkward empty space or an accidental second page.
 - **What you see is what you download.** The number of pages on screen matches the PDF you export, so there are no surprises at the end.
 - **It writes the way recruiters expect.** The agent follows a clear set of writing rules (see `philosophy.md`): lead with impact, use real numbers, start with strong verbs, and stay readable for the applicant tracking systems that scan resumes. If you ask it to stuff in keywords, it will push back.
+- **It keeps you honest, on purpose.** The goal isn't to spam keywords or inflate numbers to beat a filter. It's to take what you genuinely did and put it in its sharpest true form, so the thing that catches a recruiter's eye is real. It quantifies what's actually there and pushes back on fabrication, because invented metrics and keyword dumps are easy for a human screener to spot and they cost you the interview. Authentic and specific beats stuffed every time.
 - **You talk to it instead of filling out forms.** There's no long form to work through. You describe the job, and it writes the bullets and adjusts the layout.
 - **It's free and open.** It's your resume, and downloading it shouldn't cost anything.
 
