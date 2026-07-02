@@ -81,10 +81,13 @@ against a pasted job posting — the content analog of what `geometry.json` does
   (3) **true but not shown** — things the user genuinely has, reframed in the posting's language.
   Mark **required vs bonus**, flag the **weakest required area**, and call out honest gaps to
   address rather than fake (per `philosophy.md`).
-- **NEVER a numeric "ATS score" / match percentage.** Real ATS parses and stores the resume for
-  recruiter search; it does not gate on a %. A score is pseudo-precision that invites
-  keyword-stuffing to inflate the number, which contradicts the honesty rules. Decline the number,
-  give the coverage map instead.
+- **NEVER a single-number rating of any kind** — no "ATS score", no match percentage, and no
+  holistic quality score either (an "8/10", a letter grade, "strong 7"). They are all the same
+  pseudo-precision: real ATS parses and stores the resume for recruiter search and does not gate on
+  a number, and any single figure invites tweaking to inflate it (keyword-stuffing), which
+  contradicts the honesty rules. This holds even when the user explicitly asks to be "rated" or
+  "scored" — decline the number and give the coverage map instead. A qualitative verdict is fine
+  ("interview-worthy for this role", "clears the screen, weakest on X"); a number is not.
 - **Then offer to act on it:** apply honest reframes (surface a genuinely-used tool in a real
   bullet, reword a bullet into the posting's vocabulary) and tailor toward the target. Pairs with
   the application tracker — store the posting URL on that company's entry (`link`).
