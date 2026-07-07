@@ -76,13 +76,15 @@ async function mergePdfs(parts: Uint8Array[]): Promise<Uint8Array> {
 
 // Render one document (?doc=resume or ?doc=cover) to a PDF on the given browser. `stamp`
 // controls the continuation running-header (resume only — the cover letter never gets it).
-async function renderOne(browser: import('puppeteer').Browser, doc: 'resume' | 'cover', stamp: boolean): Promise<Uint8Array> {
+async function renderOne(browser: import('puppeteer').Browser, origin: string, doc: 'resume' | 'cover', stamp: boolean): Promise<Uint8Array> {
   const page = await browser.newPage()
   try {
     await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 1 })
     // ?print=1 tells GeometryCapture to skip measuring (this render is transient and must not
-    // overwrite the live editing view's geometry.json).
-    await page.goto(`http://localhost:3000?doc=${doc}&print=1`, { waitUntil: 'networkidle2', timeout: 10000 })
+    // overwrite the live editing view's geometry.json). `origin` is derived from the incoming
+    // request (below), NOT hardcoded to :3000 — otherwise, when another dev server holds :3000
+    // and Next starts this app on :3001, the export would render that other project's page.
+    await page.goto(`${origin}?doc=${doc}&print=1`, { waitUntil: 'networkidle2', timeout: 10000 })
 
     // Strip shell + reset zoom, and read the running header's live style (so the stamped PDF
     // header matches whatever template is active — font family, sizes, colours, rule weight).
@@ -137,19 +139,23 @@ async function renderOne(browser: import('puppeteer').Browser, doc: 'resume' | '
 export async function GET(request: Request) {
   // ?doc=resume (default) | cover | both. 'both' renders each document on its own and
   // concatenates them, so the cover letter page carries no resume continuation header.
-  const docParam = new URL(request.url).searchParams.get('doc')
+  const reqUrl = new URL(request.url)
+  const docParam = reqUrl.searchParams.get('doc')
   const doc: 'resume' | 'cover' | 'both' = docParam === 'cover' || docParam === 'both' ? docParam : 'resume'
+  // Render against THIS server's own origin (e.g. http://localhost:3001 when :3000 is taken),
+  // so the export always captures clawdcv itself, never whatever else holds the default port.
+  const origin = reqUrl.origin
 
   let browser
   try {
     browser = await puppeteer.launch()
     let out: Uint8Array
     if (doc === 'both') {
-      const resumePdf = await renderOne(browser, 'resume', true)
-      const coverPdf = await renderOne(browser, 'cover', false)
+      const resumePdf = await renderOne(browser, origin, 'resume', true)
+      const coverPdf = await renderOne(browser, origin, 'cover', false)
       out = await mergePdfs([resumePdf, coverPdf])
     } else {
-      out = await renderOne(browser, doc, doc === 'resume')
+      out = await renderOne(browser, origin, doc, doc === 'resume')
     }
 
     // Copy into a fresh ArrayBuffer-backed Uint8Array (a valid BodyInit; the raw buffers can
